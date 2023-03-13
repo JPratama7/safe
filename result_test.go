@@ -1,25 +1,32 @@
 package safetypes
 
-import "testing"
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
-func TestResult(t *testing.T) {
-	if res := result_test_ok(); res.IsOk() {
-		t.Log("the result is", res.Unwrap())
-	} else {
-		panic("result should be ok")
-	}
+func TestResultOk(t *testing.T) {
+	res := result_test_ok()
 
-	if res := result_test_none(); res.IsErr() {
-		t.Log("the result is:", res.Error())
-	} else {
-		panic("result should be err")
-	}
+	assert.Equal(t, res.IsOk(), true)
+	assert.Equal(t, res.IsErr(), false)
+	assert.NotEmpty(t, res.val)
+	assert.NotNil(t, res.val)
+}
+
+func TestResultErr(t *testing.T) {
+	res := result_test_none()
+
+	assert.Equal(t, res.IsOk(), false)
+	assert.Equal(t, res.IsErr(), true)
+	assert.Empty(t, res.val)
+	assert.Nil(t, res.val)
 }
 
 func result_test_ok() (res Result[int]) {
-	return res.Ok(7)
+	return Ok(7)
 }
 
 func result_test_none() (res Result[int]) {
-	return res.Err("some fancy error message")
+	return Err[int]("some fancy error message")
 }

@@ -1,74 +1,80 @@
 package safetypes
 
 import (
-	"encoding/json"
-	"strings"
+	"bytes"
+	"database/sql/driver"
+	"fmt"
+	"github.com/goccy/go-json"
 )
 
 type Option[T any] struct {
-	Value *T `json:"value,omitempty" bson:"value,omitempty" rethinkdb:"value,omitempty"`
+	Val *T
 }
 
 func Some[T any](value T) Option[T] {
 	return Option[T]{
-		Value: &value,
+		Val: &value,
 	}
 }
 
 func None[T any]() Option[T] {
 	return Option[T]{
-		Value: nil,
+		Val: nil,
 	}
 }
 
-func (o Option[T]) Some(value T) Option[T] {
-	o.Value = &value
-	return o
-}
-
-func (o Option[T]) None() Option[T] {
-	o.Value = nil
-	return o
-}
-
 func (o *Option[T]) IsSome() bool {
-	return o.Value != nil
+	return o.Val != nil
 }
 
 func (o *Option[T]) IsNone() bool {
-	return o.Value == nil
+	return o.Val == nil
 }
 
 func (o *Option[T]) Unwrap() T {
 	if o.IsNone() {
-		panic("can't unwrap none value")
+		return *new(T)
 	}
-	return *o.Value
+	return *o.Val
 }
 
 func (o *Option[T]) UnwrapOr(or T) T {
 	if o.IsNone() {
 		return or
 	}
-	return *o.Value
+	return *o.Val
 }
 
-func (o Option[T]) MarshalJSON() ([]byte, error) {
-	if o.IsSome() {
-		return json.Marshal(o.Value)
-	}
-	return []byte("{}"), nil
+func (o *Option[T]) MarshalJSON() ([]byte, error) {
+	return json.Marshal(o.Val)
 }
 
 func (o *Option[T]) UnmarshalJSON(data []byte) error {
-	var result T
-	if err := json.Unmarshal(data, &result); err != nil {
-		if strings.HasPrefix(string(data), "{}") {
-			o.Value = nil
+	res := new(T)
+	if err := json.Unmarshal(data, res); err != nil {
+		if bytes.HasPrefix(data, []byte("{}")) {
+			o.Val = nil
 			return nil
 		}
 		return err
 	}
-	o.Value = &result
+	o.Val = res
+	return nil
+}
+
+func (o *Option[T]) Value() (driver.Value, error) {
+	return fmt.Sprintf("%+v", o.Val), nil
+}
+
+func (o *Option[T]) Scan(src interface{}) error {
+	data, ok := src.([]byte)
+	if !ok {
+		return fmt.Errorf("failed to unmarshal val %v %s %s", src, "of type", fmt.Sprintf("%T", src))
+	}
+	res := new(T)
+	if err := json.Unmarshal(data, res); err != nil {
+		return err
+	}
+	o.Val = res
 	return nil
 }
