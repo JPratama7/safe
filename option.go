@@ -40,7 +40,7 @@ func (o *Option[T]) UnwrapOr(or T) T {
 	return *o.Val
 }
 
-func (o *Option[T]) MarshalJSON() ([]byte, error) {
+func (o Option[T]) MarshalJSON() ([]byte, error) {
 	return json.Marshal(o.Val)
 }
 
