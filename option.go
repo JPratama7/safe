@@ -11,19 +11,16 @@ type Option[T any] struct {
 	Val *T
 }
 
-func Some[T any](value T) Option[T] {
-	return Option[T]{
-		Val: &value,
-	}
+func Some[T any](value T) (o Option[T]) {
+	o.Val = &value
+	return
 }
 
-func None[T any]() Option[T] {
-	return Option[T]{
-		Val: nil,
-	}
+func None[T any]() (o Option[T]) {
+	return
 }
 
-func (o *Option[T]) IsSome() bool {
+func (o *Option[T]) IsSome() (res bool) {
 	return o.Val != nil
 }
 

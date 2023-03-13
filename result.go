@@ -13,25 +13,23 @@ type Result[T any] struct {
 	val *T
 }
 
-func Ok[T any](value T) Result[T] {
-	return Result[T]{
-		val: &value,
-		err: nil,
-	}
+func Ok[T any](value T) (res Result[T]) {
+	res.val = &value
+	return
 }
 
-func Err[T any](err string) Result[T] {
-	return Result[T]{
-		val: nil,
-		err: errors.New(err),
-	}
+func Err[T any](err string) (res Result[T]) {
+	res.err = errors.New(err)
+	return
 }
 
-func AsResult[T any](value T, err error) Result[T] {
+func AsResult[T any](value T, err error) (res Result[T]) {
 	if err != nil {
-		return Err[T](err.Error())
+		res.err = err
+		return
 	}
-	return Ok(value)
+	res.val = &value
+	return
 }
 
 func (r *Result[T]) IsOk() bool {
