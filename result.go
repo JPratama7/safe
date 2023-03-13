@@ -2,9 +2,7 @@ package safetypes
 
 import (
 	"bytes"
-	"database/sql/driver"
 	"errors"
-	"fmt"
 	"github.com/goccy/go-json"
 )
 
@@ -51,7 +49,14 @@ func (r *Result[T]) Unwrap() T {
 	return *r.val
 }
 
-func (r *Result[T]) MarshalJSON() ([]byte, error) {
+func (r *Result[T]) UnwrapOr(or T) T {
+	if r.IsOk() {
+		return or
+	}
+	return *r.val
+}
+
+func (r Result[T]) MarshalJSON() ([]byte, error) {
 	return json.Marshal(r.val)
 }
 
@@ -59,26 +64,9 @@ func (r *Result[T]) UnmarshalJSON(data []byte) error {
 	res := new(T)
 	if err := json.Unmarshal(data, res); err != nil {
 		if bytes.HasPrefix(data, []byte("{}")) {
-			r.val = nil
+			r.val = new(T)
 			return nil
 		}
-		return err
-	}
-	r.val = res
-	return nil
-}
-
-func (r *Result[T]) Value() (driver.Value, error) {
-	return fmt.Sprintf("%+v", r.val), nil
-}
-
-func (r *Result[T]) Scan(src interface{}) error {
-	data, ok := src.([]byte)
-	if !ok {
-		return fmt.Errorf("failed to unmarshal val %v %s %s", src, "of type", fmt.Sprintf("%T", src))
-	}
-	res := new(T)
-	if err := json.Unmarshal(data, res); err != nil {
 		return err
 	}
 	r.val = res
