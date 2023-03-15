@@ -3,6 +3,7 @@ package safetypes
 import (
 	"bytes"
 	"github.com/goccy/go-json"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type Option[T any] struct {
@@ -44,9 +45,26 @@ func (o Option[T]) MarshalJSON() ([]byte, error) {
 	return json.Marshal(o.Val)
 }
 
+func (o *Option[T]) MarshalBSON() ([]byte, error) {
+	return bson.Marshal(o.Val)
+}
+
 func (o *Option[T]) UnmarshalJSON(data []byte) error {
 	res := new(T)
 	if err := json.Unmarshal(data, res); err != nil {
+		if bytes.HasPrefix(data, []byte("{}")) {
+			o.Val = nil
+			return nil
+		}
+		return err
+	}
+	o.Val = res
+	return nil
+}
+
+func (o *Option[T]) UnmarshalBSON(data []byte) error {
+	res := new(T)
+	if err := bson.Unmarshal(data, res); err != nil {
 		if bytes.HasPrefix(data, []byte("{}")) {
 			o.Val = nil
 			return nil
