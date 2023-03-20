@@ -3,7 +3,7 @@ module github.com/JPratama7/safetypes
 go 1.18
 
 require (
-	github.com/goccy/go-json v0.10.1
+	github.com/goccy/go-json v0.10.2
 	github.com/stretchr/testify v1.8.2
 	go.mongodb.org/mongo-driver v1.11.2
 )
