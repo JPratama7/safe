@@ -2,6 +2,15 @@ package safetypes
 
 import "testing"
 
+type InnerStruct struct {
+	InnerField string
+}
+
+type TestingWithStruct struct {
+	OuterField string
+	InnerStruct
+}
+
 func BenchmarkResult_Err(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Err[int]("some fancy error message")
@@ -41,7 +50,7 @@ func BenchmarkOption_None(b *testing.B) {
 
 func BenchmarkOption_IsNone(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		val := None[int]()
+		val := None[TestingWithStruct]()
 		val.IsNone()
 	}
 	b.ReportAllocs()
@@ -49,7 +58,7 @@ func BenchmarkOption_IsNone(b *testing.B) {
 
 func BenchmarkOption_IsSome(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		val := Some[int](7)
+		val := Some[TestingWithStruct](TestingWithStruct{})
 		val.IsSome()
 	}
 	b.ReportAllocs()
