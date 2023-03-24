@@ -1,4 +1,4 @@
-module github.com/JPratama7/safetypes
+module github.com/JPratama7/safe
 
 go 1.18
 

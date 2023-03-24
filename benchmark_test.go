@@ -20,7 +20,7 @@ func BenchmarkResult_Err(b *testing.B) {
 
 func BenchmarkResult_Ok(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		Ok(7)
+		Ok(TestingWithStruct{})
 	}
 	b.ReportAllocs()
 }
