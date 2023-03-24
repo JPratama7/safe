@@ -4,7 +4,7 @@ Rust like result and option implementation for golang
 ## Examples
 
 ```go
-import safe "github.com/eminarican/safetypes"
+import safe "github.com/JPratama7/safe"
 ```
 
 ### Option
