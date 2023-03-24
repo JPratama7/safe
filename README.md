@@ -68,49 +68,20 @@ func retrunResult(some bool) (res safe.Result[int]) {
 
 ### Benchmark
 ```
-go test -bench=. -count 5 -run=.
+go test --bench=.
 goos: linux
 goarch: amd64
-pkg: github.com/JPratama7/safetypes
+pkg: github.com/JPratama7/safe
 cpu: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx  
-BenchmarkResult_Err-8           1000000000               0.2972 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Err-8           1000000000               0.3000 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Err-8           1000000000               0.3105 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Err-8           1000000000               0.2820 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Err-8           1000000000               0.3020 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Ok-8            1000000000               0.3029 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Ok-8            1000000000               0.3049 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Ok-8            1000000000               0.2903 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Ok-8            1000000000               0.3135 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Ok-8            1000000000               0.3055 ns/op          0 B/op          0 allocs/op
-BenchmarkResultTestOk-8         1000000000               0.3090 ns/op          0 B/op          0 allocs/op
-BenchmarkResultTestOk-8         1000000000               0.3035 ns/op          0 B/op          0 allocs/op
-BenchmarkResultTestOk-8         1000000000               0.3025 ns/op          0 B/op          0 allocs/op
-BenchmarkResultTestOk-8         1000000000               0.3206 ns/op          0 B/op          0 allocs/op
-BenchmarkResultTestOk-8         1000000000               0.3259 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_Some-8          1000000000               0.3341 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_Some-8          1000000000               0.2934 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_Some-8          1000000000               0.3058 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_Some-8          1000000000               0.3061 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_Some-8          1000000000               0.2949 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_None-8          1000000000               0.3153 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_None-8          1000000000               0.3149 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_None-8          1000000000               0.3164 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_None-8          1000000000               0.3085 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_None-8          1000000000               0.3450 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsNone-8        1000000000               0.3386 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsNone-8        1000000000               0.3206 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsNone-8        1000000000               0.3958 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsNone-8        1000000000               0.5219 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsNone-8        1000000000               0.4973 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsSome-8        1000000000               0.3281 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsSome-8        1000000000               0.3509 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsSome-8        1000000000               0.3150 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsSome-8        1000000000               0.3455 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsSome-8        1000000000               0.3798 ns/op          0 B/op          0 allocs/op
+BenchmarkResult_Err-8           1000000000               0.3575 ns/op          0 B/op          0 allocs/op
+BenchmarkResult_Ok-8            1000000000               0.3289 ns/op          0 B/op          0 allocs/op
+BenchmarkResultTestOk-8         1000000000               0.2877 ns/op          0 B/op          0 allocs/op
+BenchmarkOption_Some-8          1000000000               0.2966 ns/op          0 B/op          0 allocs/op
+BenchmarkOption_None-8          1000000000               0.3057 ns/op          0 B/op          0 allocs/op
+BenchmarkOption_IsNone-8        1000000000               0.3048 ns/op          0 B/op          0 allocs/op
+BenchmarkOption_IsSome-8        1000000000               0.2941 ns/op          0 B/op          0 allocs/op
 PASS
-ok      github.com/JPratama7/safetypes  13.001s
-
+ok      github.com/JPratama7/safe       2.452s
 ```
 
 ### Note

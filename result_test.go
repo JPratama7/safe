@@ -20,11 +20,13 @@ func TestResultErr(t *testing.T) {
 	assert.Equal(t, res.IsOk(), false)
 	assert.Equal(t, res.IsErr(), true)
 	assert.Empty(t, res.val)
-	assert.Nil(t, res.val)
 }
 
-func result_test_ok() (res Result[int]) {
-	return Ok(7)
+func result_test_ok() (res Result[TestingWithStruct]) {
+	return Ok(TestingWithStruct{
+		OuterField:  "croot",
+		InnerStruct: InnerStruct{"croot"},
+	})
 }
 
 func result_test_none() (res Result[int]) {

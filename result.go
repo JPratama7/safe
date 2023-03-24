@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/goccy/go-json"
 	"go.mongodb.org/mongo-driver/bson"
+	"reflect"
 )
 
 type Result[T any] struct {
@@ -32,7 +33,8 @@ func AsResult[T any](value T, err error) (res Result[T]) {
 }
 
 func (r *Result[T]) IsOk() bool {
-	return r.err == nil
+	val := reflect.ValueOf(r.val)
+	return r.err == nil && val.IsValid() && !val.IsZero()
 }
 
 func (r *Result[T]) IsErr() bool {
