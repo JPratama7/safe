@@ -3,11 +3,13 @@ Rust like result and option implementation for golang
 ## Examples
 
 ```go
-import safe "github.com/JPratama7/safe"
+import "github.com/JPratama7/safe"
 ```
 
 ### Option
 ```go
+import "github.com/JPratama7/safe"
+
 func checkUnwrap(opt safe.Option[int]) {
     if opt.IsSome() {
         println(opt.Unwrap())
@@ -17,11 +19,15 @@ func checkUnwrap(opt safe.Option[int]) {
 }
 ```
 ```go
+import "github.com/JPratama7/safe"
+
 func checkUnwrapOr(opt safe.Option[int]) {
     println(opt.UnwrapOr(10))
 }
 ```
 ```go
+import "github.com/JPratama7/safe"
+
 func retrunOption(some bool) (opt safe.Option[int]) {
     if some {
         return opt.Some(7)
@@ -30,6 +36,8 @@ func retrunOption(some bool) (opt safe.Option[int]) {
 }
 ```
 ```go
+import "github.com/JPratama7/safe"
+
 type Test struct {
     Field safe.Option[int]
 }
@@ -57,6 +65,8 @@ func checkUnwrap(res safe.Result[int]) {
 }
 ```
 ```go
+import "github.com/JPratama7/safe"
+
 func retrunResult(some bool) (res safe.Result[int]) {
     if some {
         return res.Ok(7)

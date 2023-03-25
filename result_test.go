@@ -1,4 +1,4 @@
-package safetypes
+package safe
 
 import (
 	"github.com/stretchr/testify/assert"

@@ -1,4 +1,4 @@
-package safetypes
+package safe
 
 import (
 	"errors"

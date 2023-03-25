@@ -1,3 +1,3 @@
-package safetypes
+package safe
 
 var ByteCheck = []byte("{}")
