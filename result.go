@@ -30,7 +30,13 @@ func AsResult[T any](value T, err error) (res Result[T]) {
 
 func (r *Result[T]) IsOk() (res bool) {
 	val := reflect.ValueNoEscapeOf(r.val)
-	res = r.err == nil && val.IsValid() && !val.IsZero()
+
+	switch val.Kind() {
+	case reflect.Chan, reflect.Slice, reflect.String, reflect.Map, reflect.Array:
+		res = !r.IsErr() && val.Len() > 0
+	default:
+		res = !r.IsErr() && val.IsValid() && !val.IsZero()
+	}
 	return
 }
 

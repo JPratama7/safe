@@ -48,7 +48,25 @@ func BenchmarkAsResultEmptyErr(b *testing.B) {
 }
 func BenchmarkAsResultEmptyNoErr(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		val := AsResult[TestingWithStruct](emtyStruct())
+		val := AsResult[TestingWithStruct](emptyStruct())
+		val.IsOk()
+		val.Unwrap()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkOkSlices(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		val := Ok([]TestingWithStruct{
+			TestingWithStruct{
+				OuterField:  "croot",
+				InnerStruct: InnerStruct{"croot"},
+			},
+			TestingWithStruct{
+				OuterField:  "croot",
+				InnerStruct: InnerStruct{"croot"},
+			},
+		})
 		val.IsOk()
 	}
 	b.ReportAllocs()
@@ -100,7 +118,7 @@ func emptyStructErr() (data TestingWithStruct, err error) {
 	return
 }
 
-func emtyStruct() (data TestingWithStruct, err error) {
+func emptyStruct() (data TestingWithStruct, err error) {
 	data = TestingWithStruct{
 		OuterField:  "testing",
 		InnerStruct: InnerStruct{InnerField: "testing2"},
