@@ -1,6 +1,9 @@
 package safetypes
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
 type InnerStruct struct {
 	InnerField string
@@ -21,6 +24,10 @@ func BenchmarkResult_Err(b *testing.B) {
 func BenchmarkResult_Ok(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Ok(TestingWithStruct{})
+		Ok(TestingWithStruct{})
+		Ok(TestingWithStruct{})
+		Ok(TestingWithStruct{})
+		Ok(TestingWithStruct{})
 	}
 	b.ReportAllocs()
 }
@@ -32,11 +39,26 @@ func BenchmarkResultTestOk(b *testing.B) {
 	b.ReportAllocs()
 }
 
+func BenchmarkAsResultEmptyErr(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		val := AsResult[TestingWithStruct](emptyStructErr())
+		val.IsErr()
+	}
+	b.ReportAllocs()
+}
+func BenchmarkAsResultEmptyNoErr(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		val := AsResult[TestingWithStruct](emtyStruct())
+		val.IsOk()
+	}
+	b.ReportAllocs()
+}
+
 func BenchmarkOption_Some(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		Some[int](7)
-		Some[int](8)
-		Some[int](9)
+		Some[TestingWithStruct](TestingWithStruct{})
+		Some[TestingWithStruct](TestingWithStruct{})
+		Some[TestingWithStruct](TestingWithStruct{})
 	}
 	b.ReportAllocs()
 }
@@ -62,4 +84,26 @@ func BenchmarkOption_IsSome(b *testing.B) {
 		val.IsSome()
 	}
 	b.ReportAllocs()
+}
+
+func BenchmarkErrorCheck(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		err := AsResult(TestingWithStruct{}, errors.New("some fancy error message"))
+		err.IsErr()
+
+	}
+	b.ReportAllocs()
+}
+
+func emptyStructErr() (data TestingWithStruct, err error) {
+	err = errors.New("some fancy error message")
+	return
+}
+
+func emtyStruct() (data TestingWithStruct, err error) {
+	data = TestingWithStruct{
+		OuterField:  "testing",
+		InnerStruct: InnerStruct{InnerField: "testing2"},
+	}
+	return
 }

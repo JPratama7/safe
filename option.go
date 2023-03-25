@@ -51,11 +51,13 @@ func (o *Option[T]) MarshalBSON() ([]byte, error) {
 
 func (o *Option[T]) UnmarshalJSON(data []byte) error {
 	res := new(T)
+
+	if bytes.HasPrefix(data, ByteCheck) {
+		o.Val = res
+		return nil
+	}
+
 	if err := json.Unmarshal(data, res); err != nil {
-		if bytes.HasPrefix(data, []byte("{}")) {
-			o.Val = res
-			return nil
-		}
 		return err
 	}
 	o.Val = res
@@ -64,11 +66,13 @@ func (o *Option[T]) UnmarshalJSON(data []byte) error {
 
 func (o *Option[T]) UnmarshalBSON(data []byte) error {
 	res := new(T)
+
+	if bytes.HasPrefix(data, ByteCheck) {
+		o.Val = new(T)
+		return nil
+	}
+
 	if err := bson.Unmarshal(data, res); err != nil {
-		if bytes.HasPrefix(data, []byte("{}")) {
-			o.Val = new(T)
-			return nil
-		}
 		return err
 	}
 	o.Val = res

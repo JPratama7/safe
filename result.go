@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"github.com/goccy/go-json"
+	"github.com/goccy/go-reflect"
 	"go.mongodb.org/mongo-driver/bson"
-	"reflect"
 )
 
 type Result[T any] struct {
@@ -24,21 +24,19 @@ func Err[T any](err string) (res Result[T]) {
 }
 
 func AsResult[T any](value T, err error) (res Result[T]) {
-	if err != nil {
-		res.err = err
-		return
-	}
-	res.val = value
+	res.val, res.err = value, err
 	return
 }
 
-func (r *Result[T]) IsOk() bool {
-	val := reflect.ValueOf(r.val)
-	return r.err == nil && val.IsValid() && !val.IsZero()
+func (r *Result[T]) IsOk() (res bool) {
+	val := reflect.ValueNoEscapeOf(r.val)
+	res = r.err == nil && val.IsValid() && !val.IsZero()
+	return
 }
 
-func (r *Result[T]) IsErr() bool {
-	return r.err != nil
+func (r *Result[T]) IsErr() (res bool) {
+	res = r.err != nil
+	return
 }
 
 func (r *Result[T]) Error() error {
@@ -69,24 +67,30 @@ func (r *Result[T]) MarshalBSON() ([]byte, error) {
 
 func (r *Result[T]) UnmarshalJSON(data []byte) error {
 	res := new(T)
+
+	if bytes.HasPrefix(data, ByteCheck) {
+		r.val = *new(T)
+		return nil
+	}
+
 	if err := json.Unmarshal(data, res); err != nil {
-		if bytes.HasPrefix(data, []byte("{}")) {
-			r.val = *new(T)
-			return nil
-		}
+
 		return err
 	}
+
 	r.val = *res
 	return nil
 }
 
 func (r *Result[T]) UnmarshalBSON(data []byte) error {
 	res := new(T)
+
+	if bytes.HasPrefix(data, ByteCheck) {
+		r.val = *new(T)
+		return nil
+	}
+
 	if err := bson.Unmarshal(data, res); err != nil {
-		if bytes.HasPrefix(data, []byte("{}")) {
-			r.val = *new(T)
-			return nil
-		}
 		return err
 	}
 	r.val = *res

@@ -1,6 +1,5 @@
 # safetypes
 Rust like result and option implementation for golang
-
 ## Examples
 
 ```go
@@ -68,20 +67,24 @@ func retrunResult(some bool) (res safe.Result[int]) {
 
 ### Benchmark
 ```
-go test --bench=.
+go test -bench=. -benchmem
 goos: linux
 goarch: amd64
 pkg: github.com/JPratama7/safe
 cpu: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx  
-BenchmarkResult_Err-8           1000000000               0.3575 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Ok-8            1000000000               0.3289 ns/op          0 B/op          0 allocs/op
-BenchmarkResultTestOk-8         1000000000               0.2877 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_Some-8          1000000000               0.2966 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_None-8          1000000000               0.3057 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsNone-8        1000000000               0.3048 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsSome-8        1000000000               0.2941 ns/op          0 B/op          0 allocs/op
+BenchmarkResult_Err-8                   1000000000               0.2939 ns/op          0 B/op          0 allocs/op
+BenchmarkResult_Ok-8                    1000000000               0.3003 ns/op          0 B/op          0 allocs/op
+BenchmarkResultTestOk-8                 1000000000               0.3017 ns/op          0 B/op          0 allocs/op
+BenchmarkAsResultEmptyErr-8             1000000000               0.2839 ns/op          0 B/op          0 allocs/op
+BenchmarkAsResultEmptyNoErr-8           13884308                84.34 ns/op           32 B/op          1 allocs/op
+BenchmarkOption_Some-8                  1000000000               0.3010 ns/op          0 B/op          0 allocs/op
+BenchmarkOption_None-8                  1000000000               0.2992 ns/op          0 B/op          0 allocs/op
+BenchmarkOption_IsNone-8                1000000000               0.2937 ns/op          0 B/op          0 allocs/op
+BenchmarkOption_IsSome-8                1000000000               0.2958 ns/op          0 B/op          0 allocs/op
+BenchmarkErrorCheck-8                   1000000000               0.2982 ns/op          0 B/op          0 allocs/op
 PASS
-ok      github.com/JPratama7/safe       2.452s
+ok      github.com/JPratama7/safe       4.286s
+
 ```
 
 ### Note
