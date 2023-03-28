@@ -77,35 +77,24 @@ func retrunResult(some bool) (res safe.Result[int]) {
 
 ### Benchmark
 ```bash
-go test -bench=. -benchmem -count=2
+go test -bench=.
 goos: linux
 goarch: amd64
 pkg: github.com/JPratama7/safe
 cpu: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx  
-BenchmarkResult_Err-8                   1000000000               0.2970 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Err-8                   1000000000               0.3087 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Ok-8                    1000000000               0.2945 ns/op          0 B/op          0 allocs/op
-BenchmarkResult_Ok-8                    1000000000               0.2937 ns/op          0 B/op          0 allocs/op
-BenchmarkResultTestOk-8                 1000000000               0.2984 ns/op          0 B/op          0 allocs/op
-BenchmarkResultTestOk-8                 1000000000               0.2929 ns/op          0 B/op          0 allocs/op
-BenchmarkAsResultEmptyErr-8             1000000000               0.3811 ns/op          0 B/op          0 allocs/op
-BenchmarkAsResultEmptyErr-8             1000000000               0.3052 ns/op          0 B/op          0 allocs/op
-BenchmarkAsResultEmptyNoErr-8           13870896                89.78 ns/op           32 B/op          1 allocs/op
-BenchmarkAsResultEmptyNoErr-8           13008793                87.34 ns/op           32 B/op          1 allocs/op
-BenchmarkOkSlices-8                      9219338               134.2 ns/op            88 B/op          2 allocs/op
-BenchmarkOkSlices-8                      8794941               133.3 ns/op            88 B/op          2 allocs/op
-BenchmarkOption_Some-8                  1000000000               0.2890 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_Some-8                  1000000000               0.2958 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_None-8                  1000000000               0.3074 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_None-8                  1000000000               0.2986 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsNone-8                1000000000               0.2961 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsNone-8                1000000000               0.3010 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsSome-8                1000000000               0.2933 ns/op          0 B/op          0 allocs/op
-BenchmarkOption_IsSome-8                1000000000               0.3076 ns/op          0 B/op          0 allocs/op
-BenchmarkErrorCheck-8                   1000000000               0.2950 ns/op          0 B/op          0 allocs/op
-BenchmarkErrorCheck-8                   1000000000               0.2926 ns/op          0 B/op          0 allocs/op
+BenchmarkOkSlices-8                      7604680               153.7 ns/op            88 B/op          2 allocs/op
+BenchmarkResult_Err-8                   1000000000               0.4449 ns/op          0 B/op          0 allocs/op
+BenchmarkResult_Ok-8                    1000000000               0.4239 ns/op          0 B/op          0 allocs/op
+BenchmarkResultTestOk-8                 1000000000               0.4808 ns/op          0 B/op          0 allocs/op
+BenchmarkAsResultEmptyErr-8             1000000000               0.4364 ns/op          0 B/op          0 allocs/op
+BenchmarkAsResultEmptyNoErr-8           10902249               103.0 ns/op            32 B/op          1 allocs/op
+BenchmarkOption_Some-8                  1000000000               0.4301 ns/op          0 B/op          0 allocs/op
+BenchmarkOption_None-8                  1000000000               0.4348 ns/op          0 B/op          0 allocs/op
+BenchmarkOption_IsNone-8                1000000000               0.4260 ns/op          0 B/op          0 allocs/op
+BenchmarkOption_IsSome-8                1000000000               0.4255 ns/op          0 B/op          0 allocs/op
+BenchmarkErrorCheck-8                   1000000000               0.4394 ns/op          0 B/op          0 allocs/op
 PASS
-ok      github.com/JPratama7/safe       11.438s
+ok      github.com/JPratama7/safe       6.976s
 ```
 
 ### Note

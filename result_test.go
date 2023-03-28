@@ -13,6 +13,14 @@ func TestResultOk(t *testing.T) {
 	assert.NotEmpty(t, res.val)
 	assert.NotNil(t, res.val)
 }
+func TestResultOkSlice(t *testing.T) {
+	res := result_test_slices()
+
+	assert.Equal(t, res.IsOk(), true)
+	assert.Equal(t, res.IsErr(), false)
+	assert.NotEmpty(t, res.val)
+	assert.NotNil(t, res.val)
+}
 
 func TestResultErr(t *testing.T) {
 	res := result_test_none()
@@ -27,6 +35,10 @@ func result_test_ok() (res Result[TestingWithStruct]) {
 		OuterField:  "croot",
 		InnerStruct: InnerStruct{"croot"},
 	})
+}
+
+func result_test_slices() (res Result[[]TestingWithStruct]) {
+	return Ok[[]TestingWithStruct]([]TestingWithStruct{{}, {}, {}})
 }
 
 func result_test_none() (res Result[int]) {

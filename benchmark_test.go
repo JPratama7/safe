@@ -14,6 +14,23 @@ type TestingWithStruct struct {
 	InnerStruct
 }
 
+func BenchmarkOkSlices(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		val := Ok([]TestingWithStruct{
+			TestingWithStruct{
+				OuterField:  "croot",
+				InnerStruct: InnerStruct{"croot"},
+			},
+			TestingWithStruct{
+				OuterField:  "croot",
+				InnerStruct: InnerStruct{"croot"},
+			},
+		})
+		val.IsOk()
+	}
+	b.ReportAllocs()
+}
+
 func BenchmarkResult_Err(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Err[int]("some fancy error message")
@@ -51,23 +68,6 @@ func BenchmarkAsResultEmptyNoErr(b *testing.B) {
 		val := AsResult[TestingWithStruct](emptyStruct())
 		val.IsOk()
 		val.Unwrap()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkOkSlices(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		val := Ok([]TestingWithStruct{
-			TestingWithStruct{
-				OuterField:  "croot",
-				InnerStruct: InnerStruct{"croot"},
-			},
-			TestingWithStruct{
-				OuterField:  "croot",
-				InnerStruct: InnerStruct{"croot"},
-			},
-		})
-		val.IsOk()
 	}
 	b.ReportAllocs()
 }
