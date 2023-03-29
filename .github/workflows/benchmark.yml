@@ -3,7 +3,7 @@ name: Go package
 on: [push]
 
 jobs:
-  Test:
+  Bench:
     strategy:
       matrix:
         go-ver: [
@@ -19,5 +19,5 @@ jobs:
           go-version: ${{ matrix.go-ver }}
       - name: Install dependencies
         run: go mod tidy
-      - name: Test
-        run: go test -v ./...
+      - name: Benchmark
+        run: go test -bench=. -count=10 .
