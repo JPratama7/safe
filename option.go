@@ -3,11 +3,10 @@ package safe
 import (
 	"bytes"
 	"github.com/goccy/go-json"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 type Option[T any] struct {
-	Val *T
+	Val *T `bson:"val"`
 }
 
 func Some[T any](value T) (o Option[T]) {
@@ -17,6 +16,14 @@ func Some[T any](value T) (o Option[T]) {
 
 func None[T any]() (o Option[T]) {
 	return
+}
+
+func (o *Option[T]) Some(value T) {
+	o.Val = &value
+}
+
+func (o *Option[T]) None() {
+	o.Val = nil
 }
 
 func (o *Option[T]) IsSome() (res bool) {
@@ -45,9 +52,9 @@ func (o Option[T]) MarshalJSON() ([]byte, error) {
 	return json.Marshal(o.Val)
 }
 
-func (o *Option[T]) MarshalBSON() ([]byte, error) {
-	return bson.Marshal(o.Val)
-}
+//func (o *Option[T]) MarshalBSON() ([]byte, error) {
+//	return bson.Marshal(o.Val)
+//}
 
 func (o *Option[T]) UnmarshalJSON(data []byte) error {
 	res := new(T)
@@ -64,17 +71,19 @@ func (o *Option[T]) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (o *Option[T]) UnmarshalBSON(data []byte) error {
-	res := new(T)
-
-	if bytes.HasPrefix(data, ByteCheck) {
-		o.Val = new(T)
-		return nil
-	}
-
-	if err := bson.Unmarshal(data, res); err != nil {
-		return err
-	}
-	o.Val = res
-	return nil
-}
+//func (o *Option[T]) UnmarshalBSON(data []byte) error {
+//	res := new(T)
+//
+//	fmt.Printf("data: %s\n", string(data))
+//
+//	if bytes.HasPrefix(data, ByteCheck) {
+//		o.Val = new(T)
+//		return nil
+//	}
+//
+//	if err := bson.Unmarshal(data, res); err != nil {
+//		return err
+//	}
+//	o.Val = res
+//	return nil
+//}

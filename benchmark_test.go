@@ -6,12 +6,12 @@ import (
 )
 
 type InnerStruct struct {
-	InnerField string
+	InnerField string `json:"innerField" bson:"innerField"`
 }
 
 type TestingWithStruct struct {
-	OuterField string
-	InnerStruct
+	OuterField  string `bson:"outerField" json:"outerField"`
+	InnerStruct `bson:"innerStruct" json:"innerStruct"`
 }
 
 func BenchmarkOkSlices(b *testing.B) {
