@@ -5,11 +5,12 @@ import (
 	"errors"
 	"github.com/goccy/go-json"
 	"github.com/goccy/go-reflect"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type Result[T any] struct {
 	err error
-	val T `bson:"val"`
+	val T
 }
 
 func Ok[T any](value T) (res Result[T]) {
@@ -90,6 +91,25 @@ func (r *Result[T]) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
+	r.val = *res
+	return nil
+}
+
+func (r Result[T]) MarshalBSON() ([]byte, error) {
+	return bson.Marshal(r.val)
+}
+
+func (r *Result[T]) UnmarshalBSON(data []byte) error {
+	res := new(T)
+
+	if bytes.Equal(data, []byte{}) {
+		r.val = *res
+		return nil
+	}
+
+	if err := bson.Unmarshal(data, res); err != nil {
+		return err
+	}
 	r.val = *res
 	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
+	"reflect"
 	"testing"
 )
 
@@ -40,51 +41,52 @@ func result_test_ok() (res Result[TestingWithStruct]) {
 }
 
 func TestMarshalUnmarshalJSONRes(t *testing.T) {
-	str := &TestingWithStruct{
+	str := TestingWithStruct{
 		OuterField:  "Hellow World",
 		InnerStruct: InnerStruct{"Hellow World World"},
 	}
-	opt := Option[TestingWithStruct]{Val: str}
+	opt := Result[TestingWithStruct]{val: str}
 
 	marshal, err := json.Marshal(opt)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	var opt2 Option[TestingWithStruct]
+	opt2 := new(Result[TestingWithStruct])
 
-	err = json.Unmarshal(marshal, &opt2)
+	err = json.Unmarshal(marshal, opt2)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, opt2.IsSome(), true)
-	assert.Equal(t, opt2.IsNone(), false)
+	assert.Equal(t, opt2.IsOk(), true)
+	assert.Equal(t, opt2.IsErr(), false)
 	assert.Equal(t, opt2.Unwrap().OuterField, opt.Unwrap().OuterField)
 	assert.Equal(t, opt2.Unwrap().InnerStruct.InnerField, opt.Unwrap().InnerStruct.InnerField)
 }
 
 func TestMarshalUnmarshalBSONRes(t *testing.T) {
-	str := &TestingWithStruct{
+	str := TestingWithStruct{
 		OuterField:  "Hellow World",
 		InnerStruct: InnerStruct{"Hellow World World"},
 	}
-	opt := Option[TestingWithStruct]{Val: str}
+	opt := Result[TestingWithStruct]{val: str}
 
 	marshal, err := bson.Marshal(opt)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	var opt2 Option[TestingWithStruct]
+	opt2 := new(Result[TestingWithStruct])
 
-	err = bson.Unmarshal(marshal, &opt2)
+	err = bson.Unmarshal(marshal, opt2)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	assert.Equal(t, opt2.IsSome(), true)
-	assert.Equal(t, opt2.IsNone(), false)
+	assert.Equal(t, opt2.IsOk(), true)
+	assert.Equal(t, opt2.IsErr(), false)
+	assert.Equal(t, reflect.DeepEqual(opt2.Unwrap(), opt.Unwrap()), true)
 	assert.Equal(t, opt2.Unwrap().OuterField, opt.Unwrap().OuterField)
 	assert.Equal(t, opt2.Unwrap().InnerStruct.InnerField, opt.Unwrap().InnerStruct.InnerField)
 }

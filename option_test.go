@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
+	"reflect"
 	"testing"
 )
 
@@ -46,6 +47,7 @@ func TestMarshalUnmarshalJSONOpt(t *testing.T) {
 
 	assert.Equal(t, opt2.IsSome(), true)
 	assert.Equal(t, opt2.IsNone(), false)
+	assert.Equal(t, reflect.DeepEqual(opt2.Unwrap(), opt.Unwrap()), true)
 	assert.Equal(t, opt2.Unwrap().OuterField, opt.Unwrap().OuterField)
 	assert.Equal(t, opt2.Unwrap().InnerStruct.InnerField, opt.Unwrap().InnerStruct.InnerField)
 }
