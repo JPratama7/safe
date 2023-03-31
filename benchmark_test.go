@@ -14,18 +14,33 @@ type TestingWithStruct struct {
 	InnerStruct `bson:"innerStruct" json:"innerStruct"`
 }
 
-func BenchmarkOkSlices(b *testing.B) {
+func BenchmarkOkSlicesStruct(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		val := Ok([]TestingWithStruct{
-			TestingWithStruct{
+			{
 				OuterField:  "croot",
 				InnerStruct: InnerStruct{"croot"},
 			},
-			TestingWithStruct{
+			{
 				OuterField:  "croot",
 				InnerStruct: InnerStruct{"croot"},
 			},
 		})
+		val.IsOk()
+	}
+	b.ReportAllocs()
+}
+func BenchmarkOkSlicesString(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		val := Ok([]string{"", "", ""})
+		val.IsOk()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkOkSlicesInt(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		val := Ok([]int{0, 0, 0})
 		val.IsOk()
 	}
 	b.ReportAllocs()

@@ -29,7 +29,6 @@ func AsResult[T any](value T, err error) (res Result[T]) {
 
 func (r *Result[T]) Ok(value T) {
 	r.val = value
-	return
 }
 
 func (r *Result[T]) Err(err string) {
