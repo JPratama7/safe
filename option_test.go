@@ -13,8 +13,8 @@ func TestSome(t *testing.T) {
 
 	assert.Equal(t, res.IsSome(), true)
 	assert.Equal(t, res.IsNone(), false)
-	assert.NotEmpty(t, res.Val)
-	assert.NotNil(t, res.Val)
+	assert.NotEmpty(t, res.val)
+	assert.NotNil(t, res.val)
 }
 
 func TestNone(t *testing.T) {
@@ -22,8 +22,7 @@ func TestNone(t *testing.T) {
 
 	assert.Equal(t, res.IsSome(), false)
 	assert.Equal(t, res.IsNone(), true)
-	assert.Empty(t, res.Val)
-	assert.Nil(t, res.Val)
+	assert.Empty(t, res.val)
 }
 
 func TestMarshalUnmarshalJSONOpt(t *testing.T) {
@@ -31,20 +30,20 @@ func TestMarshalUnmarshalJSONOpt(t *testing.T) {
 		OuterField:  "Hellow World",
 		InnerStruct: InnerStruct{"Hellow World World"},
 	}
-	opt := Option[TestingWithStruct]{Val: str}
+	opt := Some(str)
 
 	marshal, err := json.Marshal(opt)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	var opt2 Option[TestingWithStruct]
+	result := new(TestingWithStruct)
+	opt2 := Some(result)
 
 	err = json.Unmarshal(marshal, &opt2)
 	if err != nil {
 		t.Fatal(err)
 	}
-
 	assert.Equal(t, opt2.IsSome(), true)
 	assert.Equal(t, opt2.IsNone(), false)
 	assert.Equal(t, reflect.DeepEqual(opt2.Unwrap(), opt.Unwrap()), true)
@@ -57,7 +56,7 @@ func TestMarshalUnmarshalBSONOpt(t *testing.T) {
 		OuterField:  "Hellow World",
 		InnerStruct: InnerStruct{"Hellow World World"},
 	}
-	opt := Option[TestingWithStruct]{Val: str}
+	opt := Some(str)
 
 	marshal, err := bson.Marshal(opt)
 	if err != nil {

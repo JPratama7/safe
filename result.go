@@ -28,12 +28,12 @@ func AsResult[T any](value T, err error) (res Result[T]) {
 	return
 }
 
-func (r *Result[T]) Ok(value T) {
-	r.val = value
+func (r *Result[T]) Ok() Option[T] {
+	return Some[T](r.val)
 }
 
-func (r *Result[T]) Err(err string) {
-	r.err = errors.New(err)
+func (r *Result[T]) Err() Option[error] {
+	return Some[error](r.err)
 }
 
 func (r *Result[T]) IsOk() (res bool) {
@@ -41,7 +41,6 @@ func (r *Result[T]) IsOk() (res bool) {
 	if r.IsErr() {
 		return
 	}
-
 	switch val.Kind() {
 	case reflect.Chan, reflect.Slice, reflect.String, reflect.Map, reflect.Array:
 		res = val.Len() > 0
@@ -63,6 +62,13 @@ func (r *Result[T]) Error() error {
 func (r *Result[T]) Unwrap() T {
 	if r.IsErr() {
 		panic("can't unwrap err val")
+	}
+	return r.val
+}
+
+func (r *Result[T]) Expect(err error) T {
+	if r.IsErr() {
+		panic(err)
 	}
 	return r.val
 }
