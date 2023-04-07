@@ -3,17 +3,15 @@ package safe
 import (
 	"bytes"
 	"github.com/goccy/go-json"
-	"github.com/goccy/go-reflect"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 type Option[T any] struct {
-	Val    *T
-	refVal reflect.Value
+	val *T
 }
 
 func Some[T any](value T) (o Option[T]) {
-	o.Val = &value
+	o.val = &value
 	return
 }
 
@@ -22,15 +20,15 @@ func None[T any]() (o Option[T]) {
 }
 
 func (o *Option[T]) Some(value T) {
-	o.Val = &value
+	o.val = &value
 }
 
 func (o *Option[T]) None() {
-	o.Val = nil
+	o.val = nil
 }
 
 func (o *Option[T]) IsSome() (res bool) {
-	return o.Val != nil
+	return o.val != nil
 }
 
 func (o *Option[T]) IsNone() bool {
@@ -41,50 +39,50 @@ func (o *Option[T]) Unwrap() T {
 	if o.IsNone() {
 		return *new(T)
 	}
-	return *o.Val
+	return *o.val
 }
 
 func (o *Option[T]) UnwrapOr(or T) T {
 	if o.IsNone() {
 		return or
 	}
-	return *o.Val
+	return *o.val
 }
 
 func (o Option[T]) MarshalJSON() ([]byte, error) {
-	return json.Marshal(o.Val)
+	return json.Marshal(o.val)
 }
 
 func (o *Option[T]) UnmarshalJSON(data []byte) error {
 	res := new(T)
 
 	if bytes.HasPrefix(data, ByteCheck) {
-		o.Val = res
+		o.val = res
 		return nil
 	}
 
 	if err := json.Unmarshal(data, res); err != nil {
 		return err
 	}
-	o.Val = res
+	o.val = res
 	return nil
 }
 
 func (o Option[T]) MarshalBSON() ([]byte, error) {
-	return bson.Marshal(o.Val)
+	return bson.Marshal(o.val)
 }
 
 func (o *Option[T]) UnmarshalBSON(data []byte) error {
 	res := new(T)
 
 	if bytes.Equal(data, []byte{}) {
-		o.Val = res
+		o.val = res
 		return nil
 	}
 
 	if err := bson.Unmarshal(data, res); err != nil {
 		return err
 	}
-	o.Val = res
+	o.val = res
 	return nil
 }

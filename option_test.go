@@ -19,11 +19,11 @@ func TestSome(t *testing.T) {
 
 func TestNone(t *testing.T) {
 	res := option_test_none()
-	_ = res.refval
 
 	assert.Equal(t, res.IsSome(), false)
 	assert.Equal(t, res.IsNone(), true)
 	assert.Empty(t, res.val)
+	assert.Nil(t, res.val)
 }
 
 func TestMarshalUnmarshalJSONOpt(t *testing.T) {
