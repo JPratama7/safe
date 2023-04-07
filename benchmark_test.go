@@ -87,6 +87,38 @@ func BenchmarkAsResultEmptyNoErr(b *testing.B) {
 	b.ReportAllocs()
 }
 
+func BenchmarkResult_OkInt(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok(23)
+		res.IsOk()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkResult_EmptyInt(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok(0)
+		res.IsOk()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkResult_OkString(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok("hello world")
+		res.IsOk()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkResult_EmptyString(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok("")
+		res.IsOk()
+	}
+	b.ReportAllocs()
+}
+
 func BenchmarkOption_Some(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Some[TestingWithStruct](TestingWithStruct{})
