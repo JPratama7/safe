@@ -8,11 +8,13 @@ import (
 )
 
 type Option[T any] struct {
-	val T
+	val    T
+	refval reflect.Value
 }
 
 func Some[T any](value T) (o Option[T]) {
 	o.val = value
+	o.refval = reflect.ValueNoEscapeOf(value)
 	return
 }
 
@@ -30,12 +32,11 @@ func (o *Option[T]) None() {
 }
 
 func (o *Option[T]) IsSome() (res bool) {
-	val := reflect.ValueNoEscapeOf(o.val)
-	switch val.Kind() {
+	switch o.refval.Kind() {
 	case reflect.Chan, reflect.Slice, reflect.String, reflect.Map, reflect.Array:
-		res = val.Len() > 0
+		res = o.refval.Len() > 0
 	default:
-		res = val.IsValid() && !val.IsZero()
+		res = o.refval.IsValid() && !o.refval.IsZero()
 	}
 	return
 }
@@ -75,6 +76,7 @@ func (o *Option[T]) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	o.val = val
+	o.refval = reflect.ValueNoEscapeOf(val)
 	return nil
 }
 
@@ -94,5 +96,6 @@ func (o *Option[T]) UnmarshalBSON(data []byte) error {
 		return err
 	}
 	o.val = val
+	o.refval = reflect.ValueNoEscapeOf(val)
 	return nil
 }

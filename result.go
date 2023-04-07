@@ -9,12 +9,14 @@ import (
 )
 
 type Result[T any] struct {
-	err error
-	val T
+	err    error
+	val    T
+	refVal reflect.Value
 }
 
 func Ok[T any](value T) (res Result[T]) {
 	res.val = value
+	res.refVal = reflect.ValueNoEscapeOf(value)
 	return
 }
 
@@ -37,15 +39,14 @@ func (r *Result[T]) Err() Option[error] {
 }
 
 func (r *Result[T]) IsOk() (res bool) {
-	val := reflect.ValueNoEscapeOf(r.val)
 	if r.IsErr() {
 		return
 	}
-	switch val.Kind() {
+	switch r.refVal.Kind() {
 	case reflect.Chan, reflect.Slice, reflect.String, reflect.Map, reflect.Array:
-		res = val.Len() > 0
+		res = r.refVal.Len() > 0
 	default:
-		res = val.IsValid() && !val.IsZero()
+		res = r.refVal.IsValid() && !r.refVal.IsZero()
 	}
 	return
 }
@@ -98,6 +99,7 @@ func (r *Result[T]) UnmarshalJSON(data []byte) error {
 	}
 
 	r.val = *res
+	r.refVal = reflect.ValueNoEscapeOf(res)
 	return nil
 }
 
@@ -117,5 +119,6 @@ func (r *Result[T]) UnmarshalBSON(data []byte) error {
 		return err
 	}
 	r.val = *res
+	r.refVal = reflect.ValueNoEscapeOf(res)
 	return nil
 }
