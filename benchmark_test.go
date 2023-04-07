@@ -97,7 +97,7 @@ func BenchmarkResult_OkInt(b *testing.B) {
 
 func BenchmarkResult_OkIntOTF(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		res := Ok(23)
+		res := Result[int]{val: 23}
 		res.IsOkOTFReflect()
 	}
 	b.ReportAllocs()
@@ -113,8 +113,8 @@ func BenchmarkResult_EmptyInt(b *testing.B) {
 
 func BenchmarkResult_EmptyIntOTF(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		res := Ok(0)
-		res.IsOkOTFReflect()
+		res := Result[int]{}
+		res.IsOk()
 	}
 	b.ReportAllocs()
 }
@@ -122,14 +122,15 @@ func BenchmarkResult_EmptyIntOTF(b *testing.B) {
 func BenchmarkResult_OkString(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		res := Ok("hello world")
-		res.IsOk()
+		res.IsOkOTFReflect()
 	}
 	b.ReportAllocs()
 }
-
 func BenchmarkResult_OkStringOTF(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		res := Ok("hello world")
+		res := Result[string]{
+			val: "hello world",
+		}
 		res.IsOkOTFReflect()
 	}
 	b.ReportAllocs()
@@ -145,7 +146,7 @@ func BenchmarkResult_EmptyString(b *testing.B) {
 
 func BenchmarkResult_EmptyStringOTF(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		res := Ok("")
+		res := Result[string]{}
 		res.IsOkOTFReflect()
 	}
 	b.ReportAllocs()
