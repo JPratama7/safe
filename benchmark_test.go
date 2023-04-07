@@ -95,6 +95,14 @@ func BenchmarkResult_OkInt(b *testing.B) {
 	b.ReportAllocs()
 }
 
+func BenchmarkResult_OkIntZeroVal(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok(23)
+		res.IsOkZeroVal()
+	}
+	b.ReportAllocs()
+}
+
 func BenchmarkResult_OkIntOTF(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		res := Result[int]{val: 23}
@@ -107,6 +115,14 @@ func BenchmarkResult_EmptyInt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		res := Ok(0)
 		res.IsOk()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkResult_EmptyIntZeroVal(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok(0)
+		res.IsOkZeroVal()
 	}
 	b.ReportAllocs()
 }
@@ -126,6 +142,15 @@ func BenchmarkResult_OkString(b *testing.B) {
 	}
 	b.ReportAllocs()
 }
+
+func BenchmarkResult_OkStringZeroVal(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok("hello world")
+		res.IsOkZeroVal()
+	}
+	b.ReportAllocs()
+}
+
 func BenchmarkResult_OkStringOTF(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		res := Result[string]{
@@ -140,6 +165,14 @@ func BenchmarkResult_EmptyString(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		res := Ok("")
 		res.IsOk()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkResult_EmptyStringZeroVal(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok("")
+		res.IsOkZeroVal()
 	}
 	b.ReportAllocs()
 }

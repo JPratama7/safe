@@ -69,6 +69,15 @@ func (r *Result[T]) IsOkOTFReflect() (res bool) {
 	return
 }
 
+func (r *Result[T]) IsOkZeroVal() (res bool) {
+	if r.IsErr() {
+		return
+	}
+	typ := reflect.Zero(reflect.TypeOf(r.val))
+	res = typ == reflect.ValueNoEscapeOf(r.val)
+	return
+}
+
 func (r *Result[T]) IsErr() (res bool) {
 	res = r.err != nil
 	return
