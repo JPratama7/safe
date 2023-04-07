@@ -43,10 +43,12 @@ func (r *Result[T]) IsOk() (res bool) {
 		return
 	}
 	switch r.refVal.Kind() {
-	case reflect.Chan, reflect.Slice, reflect.String, reflect.Map, reflect.Array:
+	case reflect.Chan, reflect.Slice, reflect.Map, reflect.Array:
 		res = r.refVal.Len() > 0
+		break
 	default:
 		res = r.refVal.IsValid() && !r.refVal.IsZero()
+		break
 	}
 	return
 }
@@ -57,10 +59,12 @@ func (r *Result[T]) IsOkOTFReflect() (res bool) {
 		return
 	}
 	switch val.Kind() {
-	case reflect.Chan, reflect.Slice, reflect.String, reflect.Map, reflect.Array:
+	case reflect.Chan, reflect.Slice, reflect.Map, reflect.Array:
 		res = r.refVal.Len() > 0
+		break
 	default:
 		res = r.refVal.IsValid() && !r.refVal.IsZero()
+		break
 	}
 	return
 }
