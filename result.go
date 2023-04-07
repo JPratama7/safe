@@ -51,6 +51,20 @@ func (r *Result[T]) IsOk() (res bool) {
 	return
 }
 
+func (r *Result[T]) IsOkOTFReflect() (res bool) {
+	val := reflect.ValueNoEscapeOf(r.val)
+	if r.IsErr() {
+		return
+	}
+	switch val.Kind() {
+	case reflect.Chan, reflect.Slice, reflect.String, reflect.Map, reflect.Array:
+		res = r.refVal.Len() > 0
+	default:
+		res = r.refVal.IsValid() && !r.refVal.IsZero()
+	}
+	return
+}
+
 func (r *Result[T]) IsErr() (res bool) {
 	res = r.err != nil
 	return
