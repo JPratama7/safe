@@ -30,6 +30,41 @@ func BenchmarkOkSlicesStruct(b *testing.B) {
 	}
 	b.ReportAllocs()
 }
+
+func BenchmarkOkSlicesStructZeroVal(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		val := Result[[]TestingWithStruct]{val: []TestingWithStruct{
+			{
+				OuterField:  "croot",
+				InnerStruct: InnerStruct{"croot"},
+			},
+			{
+				OuterField:  "croot",
+				InnerStruct: InnerStruct{"croot"},
+			},
+		}}
+		val.IsOk()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkOkSlicesStructOTF(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		val := Result[[]TestingWithStruct]{val: []TestingWithStruct{
+			{
+				OuterField:  "croot",
+				InnerStruct: InnerStruct{"croot"},
+			},
+			{
+				OuterField:  "croot",
+				InnerStruct: InnerStruct{"croot"},
+			},
+		}}
+		val.IsOkOTFReflect()
+	}
+	b.ReportAllocs()
+}
+
 func BenchmarkOkSlicesString(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		val := Ok([]string{"", "", ""})
@@ -97,7 +132,7 @@ func BenchmarkResult_OkInt(b *testing.B) {
 
 func BenchmarkResult_OkIntZeroVal(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		res := Ok(23)
+		res := Result[int]{val: 23}
 		res.IsOkZeroVal()
 	}
 	b.ReportAllocs()
@@ -121,7 +156,7 @@ func BenchmarkResult_EmptyInt(b *testing.B) {
 
 func BenchmarkResult_EmptyIntZeroVal(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		res := Ok(0)
+		res := Result[int]{}
 		res.IsOkZeroVal()
 	}
 	b.ReportAllocs()
@@ -145,7 +180,9 @@ func BenchmarkResult_OkString(b *testing.B) {
 
 func BenchmarkResult_OkStringZeroVal(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		res := Ok("hello world")
+		res := Result[string]{
+			val: "hello world",
+		}
 		res.IsOkZeroVal()
 	}
 	b.ReportAllocs()
@@ -171,7 +208,7 @@ func BenchmarkResult_EmptyString(b *testing.B) {
 
 func BenchmarkResult_EmptyStringZeroVal(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		res := Ok("")
+		res := Result[string]{}
 		res.IsOkZeroVal()
 	}
 	b.ReportAllocs()
