@@ -10,7 +10,7 @@ func Checker(val reflect.Value) (res bool) {
 	case reflect.Chan, reflect.Slice, reflect.Map:
 		res = !val.IsNil()
 		break
-	case reflect.Array, reflect.String:
+	case reflect.Array:
 		res = val.Len() > 0
 		break
 	default:

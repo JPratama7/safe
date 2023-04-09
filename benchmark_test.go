@@ -43,7 +43,7 @@ func BenchmarkOkSlicesStructZeroVal(b *testing.B) {
 				InnerStruct: InnerStruct{"croot"},
 			},
 		}}
-		val.IsOk()
+		val.IsOkZeroVal()
 	}
 	b.ReportAllocs()
 }
