@@ -3,6 +3,9 @@ package safe
 import "github.com/goccy/go-reflect"
 
 func Checker(val reflect.Value) (res bool) {
+	if !val.IsValid() {
+		return
+	}
 	switch val.Kind() {
 	case reflect.Chan, reflect.Slice, reflect.Map:
 		res = !val.IsNil()
@@ -11,7 +14,7 @@ func Checker(val reflect.Value) (res bool) {
 		res = val.Len() > 0
 		break
 	default:
-		res = val.IsValid() && !val.IsZero()
+		res = !val.IsZero()
 		break
 	}
 	return res

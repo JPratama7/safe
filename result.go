@@ -58,7 +58,6 @@ func (r *Result[T]) IsOkOTFReflect() (res bool) {
 	if r.IsErr() {
 		return
 	}
-
 	res = Checker(val)
 	return
 }
