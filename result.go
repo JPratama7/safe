@@ -59,18 +59,7 @@ func (r *Result[T]) IsOkOTFReflect() (res bool) {
 		return
 	}
 
-	//Array, Chan, Map, Slice, String
-	switch val.Kind() {
-	case reflect.Chan, reflect.Slice, reflect.Map:
-		res = !val.IsNil()
-		break
-	case reflect.Array, reflect.String:
-		res = val.Len() > 0
-		break
-	default:
-		res = r.refVal.IsValid() && !r.refVal.IsZero()
-		break
-	}
+	res = Checker(val)
 	return
 }
 
