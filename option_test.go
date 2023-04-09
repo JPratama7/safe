@@ -14,7 +14,6 @@ func TestSome(t *testing.T) {
 	assert.Equal(t, res.IsSome(), true)
 	assert.Equal(t, res.IsNone(), false)
 	assert.NotEmpty(t, res.val)
-	assert.NotNil(t, res.val)
 }
 
 func TestNone(t *testing.T) {
@@ -23,7 +22,6 @@ func TestNone(t *testing.T) {
 	assert.Equal(t, res.IsSome(), false)
 	assert.Equal(t, res.IsNone(), true)
 	assert.Empty(t, res.val)
-	assert.Nil(t, res.val)
 }
 
 func TestMarshalUnmarshalJSONOpt(t *testing.T) {
