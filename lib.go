@@ -16,12 +16,6 @@ func Checker(val reflect.Value) (res bool) {
 	case reflect.String:
 		res = val != reflect.Zero(val.Type())
 		break
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		res = val != reflect.Zero(val.Type())
-		break
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-		res = val != reflect.Zero(val.Type())
-		break
 	default:
 		res = !val.IsZero()
 		break
