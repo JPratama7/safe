@@ -16,6 +16,9 @@ func Checker(val reflect.Value) (res bool) {
 	case reflect.String:
 		res = val != reflect.Zero(val.Type())
 		break
+	case reflect.Struct:
+		res = val != reflect.Zero(val.Type())
+		break
 	default:
 		res = !val.IsZero()
 		break
