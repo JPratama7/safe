@@ -3,8 +3,9 @@ package safe
 import (
 	"bytes"
 	"github.com/goccy/go-json"
-	"github.com/goccy/go-reflect"
+	//"github.com/goccy/go-reflect"
 	"go.mongodb.org/mongo-driver/bson"
+	"reflect"
 )
 
 type Option[T any] struct {
@@ -29,7 +30,7 @@ func (o *Option[T]) None() {
 }
 
 func (o *Option[T]) IsSome() (res bool) {
-	res = Checker(reflect.ValueNoEscapeOf(o.val))
+	res = reflect.ValueOf(o.val).Equal(reflect.Zero(reflect.TypeOf(o.val)))
 	return
 }
 
