@@ -30,7 +30,8 @@ func (o *Option[T]) None() {
 }
 
 func (o *Option[T]) IsSome() (res bool) {
-	res = reflect.ValueOf(o.val).Equal(reflect.Zero(reflect.TypeOf(o.val)))
+	val := reflect.ValueOf(o.val)
+	res = val.IsValid() && !val.IsZero()
 	return
 }
 
