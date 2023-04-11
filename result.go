@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"errors"
 	"github.com/goccy/go-json"
-	"github.com/goccy/go-reflect"
+	//"github.com/goccy/go-reflect"
 	"go.mongodb.org/mongo-driver/bson"
+	"reflect"
 )
 
 type Result[T any] struct {
@@ -16,7 +17,7 @@ type Result[T any] struct {
 
 func Ok[T any](value T) (res Result[T]) {
 	res.val = value
-	res.refVal = reflect.ValueNoEscapeOf(value)
+	res.refVal = reflect.ValueOf(value)
 	return
 }
 
@@ -54,11 +55,11 @@ func (r *Result[T]) IsOk() (res bool) {
 }
 
 func (r *Result[T]) IsOkOTFReflect() (res bool) {
-	val := reflect.ValueNoEscapeOf(r.val)
+	val := reflect.ValueOf(r.val)
 	if r.IsErr() {
 		return
 	}
-	res = Checker(val)
+	res = val.IsValid() && !val.IsZero()
 	return
 }
 
@@ -67,7 +68,7 @@ func (r *Result[T]) IsOkZeroVal() (res bool) {
 		return
 	}
 	typ := reflect.Zero(reflect.TypeOf(r.val))
-	res = typ == reflect.ValueNoEscapeOf(r.val)
+	res = typ == reflect.ValueOf(r.val)
 	return
 }
 
@@ -119,7 +120,7 @@ func (r *Result[T]) UnmarshalJSON(data []byte) error {
 	}
 
 	r.val = *res
-	r.refVal = reflect.ValueNoEscapeOf(res)
+	r.refVal = reflect.ValueOf(res)
 	return nil
 }
 
@@ -139,6 +140,6 @@ func (r *Result[T]) UnmarshalBSON(data []byte) error {
 		return err
 	}
 	r.val = *res
-	r.refVal = reflect.ValueNoEscapeOf(res)
+	r.refVal = reflect.ValueOf(res)
 	return nil
 }
