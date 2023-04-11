@@ -2,7 +2,6 @@ package safe
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/goccy/go-reflect"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
