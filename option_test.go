@@ -2,9 +2,9 @@ package safe
 
 import (
 	"encoding/json"
+	"github.com/goccy/go-reflect"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
-	"reflect"
 	"testing"
 )
 
@@ -16,9 +16,24 @@ func TestSome(t *testing.T) {
 	assert.NotEmpty(t, res.val)
 }
 
+func TestSomeStruct(t *testing.T) {
+	res := Some(TestingWithStruct{OuterField: "Test", InnerStruct: InnerStruct{InnerField: "Test"}})
+
+	assert.Equal(t, res.IsSome(), true)
+	assert.Equal(t, res.IsNone(), false)
+	assert.NotEmpty(t, res.val)
+}
+
 func TestNone(t *testing.T) {
 	res := option_test_none()
 
+	assert.Equal(t, res.IsSome(), false)
+	assert.Equal(t, res.IsNone(), true)
+	assert.Empty(t, res.val)
+}
+
+func TestNoneStruct(t *testing.T) {
+	res := Some(TestingWithStruct{})
 	assert.Equal(t, res.IsSome(), false)
 	assert.Equal(t, res.IsNone(), true)
 	assert.Empty(t, res.val)

@@ -13,11 +13,8 @@ func Checker(val reflect.Value) (res bool) {
 	case reflect.Array:
 		res = val.Len() > 0
 		break
-	case reflect.String:
-		res = val != reflect.Zero(val.Type())
-		break
-	case reflect.Struct:
-		res = val != reflect.Zero(val.Type())
+	case reflect.Struct, reflect.String:
+		res = val.Interface() != reflect.Zero(val.Type()).Interface()
 		break
 	default:
 		res = !val.IsZero()
