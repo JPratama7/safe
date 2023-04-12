@@ -20,21 +20,21 @@ func None[T any]() (o Option[T]) {
 	return
 }
 
-func (o *Option[T]) Some(value T) {
+func (o Option[T]) Some(value T) {
 	o.val = value
 }
 
-func (o *Option[T]) None() {
+func (o Option[T]) None() {
 	var val T
 	o.val = val
 }
 
-func (o *Option[T]) IsSome() (res bool) {
+func (o Option[T]) IsSome() (res bool) {
 	res = NotEmpty(o.val)
 	return
 }
 
-func (o *Option[T]) IsNone() (res bool) {
+func (o Option[T]) IsNone() (res bool) {
 	res = !NotEmpty(o.val)
 	return
 }
