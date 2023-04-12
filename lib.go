@@ -3,7 +3,6 @@ package safe
 import (
 	"github.com/goccy/go-reflect"
 	"math"
-	refdef "reflect"
 )
 
 func Checker(val reflect.Value) (res bool) {
@@ -40,8 +39,6 @@ func Checker(val reflect.Value) (res bool) {
 		res = math.Float64bits(real(c)) != 0 && math.Float64bits(imag(c)) != 0
 		return
 	default:
-		valref := refdef.ValueOf(val.Interface())
-		res = valref.IsValid() && !valref.IsZero()
 		return
 	}
 }
