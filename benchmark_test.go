@@ -31,41 +31,6 @@ func BenchmarkOkSlicesStruct(b *testing.B) {
 	}
 	b.ReportAllocs()
 }
-
-func BenchmarkOkSlicesStructGoReflect(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		val := Result[[]TestingWithStruct]{val: []TestingWithStruct{
-			{
-				OuterField:  "croot",
-				InnerStruct: InnerStruct{"croot"},
-			},
-			{
-				OuterField:  "croot",
-				InnerStruct: InnerStruct{"croot"},
-			},
-		}}
-		val.IsOkGoReflect()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkOkSlicesStructOTF(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		val := Result[[]TestingWithStruct]{val: []TestingWithStruct{
-			{
-				OuterField:  "croot",
-				InnerStruct: InnerStruct{"croot"},
-			},
-			{
-				OuterField:  "croot",
-				InnerStruct: InnerStruct{"croot"},
-			},
-		}}
-		val.IsOkOTFReflect()
-	}
-	b.ReportAllocs()
-}
-
 func BenchmarkOkSlicesString(b *testing.B) {
 	strings := []string{"", "", ""}
 	for i := 0; i < b.N; i++ {
@@ -119,107 +84,8 @@ func BenchmarkAsResultEmptyErr(b *testing.B) {
 func BenchmarkAsResultEmptyNoErr(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		val := AsResult[TestingWithStruct](emptyStruct())
-		val.IsOkGoReflect()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_OkInt(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Ok(23)
-		res.IsOk()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_OkIntGoReflect(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Result[int]{val: 23}
-		res.IsOkGoReflect()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_OkIntOTF(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Result[int]{val: 23}
-		res.IsOkOTFReflect()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_EmptyInt(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Ok(0)
-		res.IsOk()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_EmptyIntGoReflect(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Result[int]{}
-		res.IsOkGoReflect()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_EmptyIntOTF(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Result[int]{}
-		res.IsOk()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_OkString(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Ok("hello world")
-		res.IsOkOTFReflect()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_OkStringGoReflect(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Result[string]{
-			val: "hello world",
-		}
-		res.IsOkGoReflect()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_OkStringOTF(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Result[string]{
-			val: "hello world",
-		}
-		res.IsOkOTFReflect()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_EmptyString(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Ok("")
-		res.IsOk()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_EmptyStringGoReflect(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Result[string]{}
-		res.IsOkGoReflect()
-	}
-	b.ReportAllocs()
-}
-
-func BenchmarkResult_EmptyStringOTF(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		res := Result[string]{}
-		res.IsOkOTFReflect()
+		val.IsOk()
+		val.Unwrap()
 	}
 	b.ReportAllocs()
 }
