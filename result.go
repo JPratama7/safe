@@ -64,8 +64,8 @@ func (r *Result[T]) IsOkOTFReflect() (res bool) {
 	case reflect.Chan, reflect.Slice, reflect.Map:
 		res = !val.IsNil()
 		return
-	case reflect.Array:
-		res = val.Equal(reflect.Zero(val.Type()))
+	case reflect.Array, reflect.Struct:
+		res = !val.Equal(reflect.Zero(val.Type()))
 	default:
 		res = val.IsValid() && !val.IsZero()
 		return
