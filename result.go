@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"github.com/goccy/go-json"
-	//"github.com/goccy/go-reflect"
+	goref "github.com/goccy/go-reflect"
 	"go.mongodb.org/mongo-driver/bson"
 	"reflect"
 )
@@ -73,12 +73,11 @@ func (r *Result[T]) IsOkOTFReflect() (res bool) {
 	return
 }
 
-func (r *Result[T]) IsOkZeroVal() (res bool) {
+func (r *Result[T]) IsOkGoReflect() (res bool) {
 	if r.IsErr() {
 		return
 	}
-	typ := reflect.Zero(reflect.TypeOf(r.val))
-	res = typ == reflect.ValueOf(r.val)
+	res = Checker(goref.ValueNoEscapeOf(r.val))
 	return
 }
 

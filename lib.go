@@ -13,10 +13,7 @@ func Checker(val reflect.Value) (res bool) {
 	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice, reflect.UnsafePointer:
 		res = !val.IsNil()
 		return
-	case reflect.Array:
-		res = val.Len() > 0
-		return
-	case reflect.Struct:
+	case reflect.Struct, reflect.Array:
 		res = val.Interface() != reflect.Zero(val.Type()).Interface()
 		return
 	case reflect.String:

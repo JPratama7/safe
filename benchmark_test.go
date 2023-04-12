@@ -31,7 +31,7 @@ func BenchmarkOkSlicesStruct(b *testing.B) {
 	b.ReportAllocs()
 }
 
-func BenchmarkOkSlicesStructZeroVal(b *testing.B) {
+func BenchmarkOkSlicesStructGoReflect(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		val := Result[[]TestingWithStruct]{val: []TestingWithStruct{
 			{
@@ -43,7 +43,7 @@ func BenchmarkOkSlicesStructZeroVal(b *testing.B) {
 				InnerStruct: InnerStruct{"croot"},
 			},
 		}}
-		val.IsOkZeroVal()
+		val.IsOkGoReflect()
 	}
 	b.ReportAllocs()
 }
@@ -116,7 +116,7 @@ func BenchmarkAsResultEmptyErr(b *testing.B) {
 func BenchmarkAsResultEmptyNoErr(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		val := AsResult[TestingWithStruct](emptyStruct())
-		val.IsOkOTFReflect()
+		val.IsOkGoReflect()
 		val.Unwrap()
 	}
 	b.ReportAllocs()
@@ -130,10 +130,10 @@ func BenchmarkResult_OkInt(b *testing.B) {
 	b.ReportAllocs()
 }
 
-func BenchmarkResult_OkIntZeroVal(b *testing.B) {
+func BenchmarkResult_OkIntGoReflect(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		res := Result[int]{val: 23}
-		res.IsOkZeroVal()
+		res.IsOkGoReflect()
 	}
 	b.ReportAllocs()
 }
@@ -154,10 +154,10 @@ func BenchmarkResult_EmptyInt(b *testing.B) {
 	b.ReportAllocs()
 }
 
-func BenchmarkResult_EmptyIntZeroVal(b *testing.B) {
+func BenchmarkResult_EmptyIntGoReflect(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		res := Result[int]{}
-		res.IsOkZeroVal()
+		res.IsOkGoReflect()
 	}
 	b.ReportAllocs()
 }
@@ -178,12 +178,12 @@ func BenchmarkResult_OkString(b *testing.B) {
 	b.ReportAllocs()
 }
 
-func BenchmarkResult_OkStringZeroVal(b *testing.B) {
+func BenchmarkResult_OkStringGoReflect(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		res := Result[string]{
 			val: "hello world",
 		}
-		res.IsOkZeroVal()
+		res.IsOkGoReflect()
 	}
 	b.ReportAllocs()
 }
@@ -206,10 +206,10 @@ func BenchmarkResult_EmptyString(b *testing.B) {
 	b.ReportAllocs()
 }
 
-func BenchmarkResult_EmptyStringZeroVal(b *testing.B) {
+func BenchmarkResult_EmptyStringGoReflect(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		res := Result[string]{}
-		res.IsOkZeroVal()
+		res.IsOkGoReflect()
 	}
 	b.ReportAllocs()
 }
