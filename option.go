@@ -2,8 +2,8 @@ package safe
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/goccy/go-json"
-	"github.com/goccy/go-reflect"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -30,29 +30,30 @@ func (o *Option[T]) None() {
 }
 
 func (o *Option[T]) IsSome() (res bool) {
-	val := reflect.ValueNoEscapeOf(o.val)
-	switch val.Kind() {
-	case reflect.Chan, reflect.Slice, reflect.String, reflect.Map, reflect.Array:
-		res = val.Len() > 0
-	default:
-		res = val.IsValid() && !val.IsZero()
-	}
+	res = NotEmpty(o.val)
 	return
 }
 
-func (o *Option[T]) IsNone() bool {
-	return !o.IsSome()
+func (o *Option[T]) IsNone() (res bool) {
+	res = !NotEmpty(o.val)
+	return
 }
 
-func (o *Option[T]) Unwrap() T {
+func (o Option[T]) Expect(err string) T {
 	if o.IsNone() {
-		var val T
-		o.val = val
+		panic(fmt.Errorf(err))
 	}
 	return o.val
 }
 
-func (o *Option[T]) UnwrapOr(or T) T {
+func (o Option[T]) Unwrap() T {
+	if o.IsNone() {
+		panic("can't unwrap none val")
+	}
+	return o.val
+}
+
+func (o Option[T]) UnwrapOr(or T) T {
 	if o.IsNone() {
 		return or
 	}

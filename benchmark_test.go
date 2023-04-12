@@ -15,32 +15,35 @@ type TestingWithStruct struct {
 }
 
 func BenchmarkOkSlicesStruct(b *testing.B) {
+	preallocate := []TestingWithStruct{
+		{
+			OuterField:  "croot",
+			InnerStruct: InnerStruct{"croot"},
+		},
+		{
+			OuterField:  "croot",
+			InnerStruct: InnerStruct{"croot"},
+		},
+	}
 	for i := 0; i < b.N; i++ {
-		val := Ok([]TestingWithStruct{
-			{
-				OuterField:  "croot",
-				InnerStruct: InnerStruct{"croot"},
-			},
-			{
-				OuterField:  "croot",
-				InnerStruct: InnerStruct{"croot"},
-			},
-		})
+		val := Ok(preallocate)
 		val.IsOk()
 	}
 	b.ReportAllocs()
 }
 func BenchmarkOkSlicesString(b *testing.B) {
+	strings := []string{"", "", ""}
 	for i := 0; i < b.N; i++ {
-		val := Ok([]string{"", "", ""})
+		val := Ok(strings)
 		val.IsOk()
 	}
 	b.ReportAllocs()
 }
 
 func BenchmarkOkSlicesInt(b *testing.B) {
+	ints := []int{0, 0, 0}
 	for i := 0; i < b.N; i++ {
-		val := Ok([]int{0, 0, 0})
+		val := Ok(ints)
 		val.IsOk()
 	}
 	b.ReportAllocs()
@@ -87,6 +90,38 @@ func BenchmarkAsResultEmptyNoErr(b *testing.B) {
 	b.ReportAllocs()
 }
 
+func BenchmarkResult_OkInt(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok(23)
+		res.IsOk()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkResult_EmptyInt(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok(0)
+		res.IsOk()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkResult_OkString(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok("hello world")
+		res.IsOk()
+	}
+	b.ReportAllocs()
+}
+
+func BenchmarkResult_EmptyString(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		res := Ok("")
+		res.IsOk()
+	}
+	b.ReportAllocs()
+}
+
 func BenchmarkOption_Some(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		Some[TestingWithStruct](TestingWithStruct{})
@@ -112,8 +147,9 @@ func BenchmarkOption_IsNone(b *testing.B) {
 }
 
 func BenchmarkOption_IsSome(b *testing.B) {
+	withStruct := TestingWithStruct{}
 	for i := 0; i < b.N; i++ {
-		val := Some[TestingWithStruct](TestingWithStruct{})
+		val := Some(withStruct)
 		val.IsSome()
 	}
 	b.ReportAllocs()

@@ -3,8 +3,8 @@ package safe
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"github.com/goccy/go-json"
-	"github.com/goccy/go-reflect"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -37,16 +37,10 @@ func (r *Result[T]) Err() Option[error] {
 }
 
 func (r *Result[T]) IsOk() (res bool) {
-	val := reflect.ValueNoEscapeOf(r.val)
 	if r.IsErr() {
 		return
 	}
-	switch val.Kind() {
-	case reflect.Chan, reflect.Slice, reflect.String, reflect.Map, reflect.Array:
-		res = val.Len() > 0
-	default:
-		res = val.IsValid() && !val.IsZero()
-	}
+	res = NotEmpty(r.val)
 	return
 }
 
@@ -59,21 +53,21 @@ func (r *Result[T]) Error() error {
 	return r.err
 }
 
-func (r *Result[T]) Unwrap() T {
+func (r Result[T]) Unwrap() T {
 	if r.IsErr() {
 		panic("can't unwrap err val")
 	}
 	return r.val
 }
 
-func (r *Result[T]) Expect(err error) T {
+func (r Result[T]) Expect(err string) T {
 	if r.IsErr() {
-		panic(err)
+		panic(fmt.Errorf(err))
 	}
 	return r.val
 }
 
-func (r *Result[T]) UnwrapOr(or T) T {
+func (r Result[T]) UnwrapOr(or T) T {
 	if r.IsOk() {
 		return or
 	}
