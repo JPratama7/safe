@@ -16,6 +16,9 @@ func NotEmpty(data any) (res bool) {
 		return
 	case refdef.Array, refdef.Struct:
 		res = val.Interface() != refdef.Zero(val.Type()).Interface()
+		return
+	case refdef.String:
+		res = val != refdef.Zero(val.Type())
 	default:
 		res = !val.IsZero()
 		return
