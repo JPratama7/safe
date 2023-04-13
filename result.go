@@ -28,15 +28,15 @@ func AsResult[T any](value T, err error) (res Result[T]) {
 	return
 }
 
-func (r Result[T]) Ok() Option[T] {
+func (r *Result[T]) Ok() Option[T] {
 	return Some[T](r.val)
 }
 
-func (r Result[T]) Err() Option[error] {
+func (r *Result[T]) Err() Option[error] {
 	return Some[error](r.err)
 }
 
-func (r Result[T]) IsOk() (res bool) {
+func (r *Result[T]) IsOk() (res bool) {
 	if r.IsErr() {
 		return
 	}
@@ -44,7 +44,7 @@ func (r Result[T]) IsOk() (res bool) {
 	return
 }
 
-func (r Result[T]) IsErr() (res bool) {
+func (r *Result[T]) IsErr() (res bool) {
 	res = r.err != nil
 	return
 }

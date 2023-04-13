@@ -29,12 +29,12 @@ func (o *Option[T]) None() {
 	o.val = val
 }
 
-func (o Option[T]) IsSome() (res bool) {
+func (o *Option[T]) IsSome() (res bool) {
 	res = NotEmpty(o.val)
 	return
 }
 
-func (o Option[T]) IsNone() (res bool) {
+func (o *Option[T]) IsNone() (res bool) {
 	res = !NotEmpty(o.val)
 	return
 }
