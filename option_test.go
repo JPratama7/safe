@@ -9,7 +9,7 @@ import (
 )
 
 func TestSome(t *testing.T) {
-	res := option_test_some()
+	res := Some(7)
 
 	assert.Equal(t, res.IsSome(), true)
 	assert.Equal(t, res.IsNone(), false)
@@ -25,7 +25,7 @@ func TestSomeStruct(t *testing.T) {
 }
 
 func TestNone(t *testing.T) {
-	res := option_test_none()
+	res := None[int]()
 
 	assert.Equal(t, res.IsSome(), false)
 	assert.Equal(t, res.IsNone(), true)

@@ -9,24 +9,26 @@ func NotEmpty(data any) (res bool) {
 	val := reflect.ToReflectValue(reflect.ValueNoEscapeOf(data))
 	typeOf := val.Type()
 	valDef := refdef.Zero(typeOf)
+	//fmt.Printf("value Croot zeroed : %+v \n", valDef)
+	//fmt.Printf("value Croot : %+v \n", val)
+	//fmt.Printf("value Croot compare : %+v \n", val.Equal(valDef))
 	if !val.IsValid() {
 		return
 	}
 	switch val.Kind() {
-	case reflect.Chan, reflect.Slice, reflect.Map:
+	case refdef.Chan, refdef.Slice, refdef.Map, refdef.Func, refdef.Pointer, refdef.UnsafePointer, refdef.Interface:
 		res = !val.IsNil()
 		return
-	case reflect.Array, reflect.Struct:
+	case refdef.Array, refdef.Struct:
 		res = val.Interface() != valDef.Interface()
 		return
-	//case reflect.String:
-	//	res = val != valDef
-	//	return
-	default:
+	case refdef.String:
 		res = val != valDef
 		return
+	default:
+		res = !val.IsZero()
+		return
 		//default:
-		//	res = !val.IsZero()
 		//	return
 	}
 }

@@ -2,7 +2,6 @@ package safe
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
 	"reflect"
@@ -20,7 +19,6 @@ func TestResultOk(t *testing.T) {
 
 func TestResultOkStruct(t *testing.T) {
 	res := Ok(TestingWithStruct{"Testing", InnerStruct{InnerField: "Testing 2"}})
-	fmt.Printf("%v", res.Unwrap())
 
 	assert.Equal(t, res.IsOk(), true)
 	assert.Equal(t, res.IsErr(), false)

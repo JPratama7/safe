@@ -17,6 +17,8 @@ func Some[T any](value T) (o Option[T]) {
 }
 
 func None[T any]() (o Option[T]) {
+	var val T
+	o.val = val
 	return
 }
 
