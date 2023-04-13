@@ -19,7 +19,10 @@ func NotEmpty(data any) (res bool) {
 		res = val.Interface() != valdef
 		return
 	case reflect.String:
-		res = val != refdef.Zero(val.Type())
+		if s, ok := data.(string); ok {
+			res = s != ""
+			return
+		}
 		return
 	default:
 		res = !val.IsZero()
