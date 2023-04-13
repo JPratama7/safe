@@ -7,7 +7,8 @@ import (
 
 func NotEmpty(data any) (res bool) {
 	val := reflect.ToReflectValue(reflect.ValueNoEscapeOf(data))
-	valdef := refdef.Zero(val.Type()).Interface()
+	typeOf := val.Type()
+	valDef := refdef.Zero(typeOf).Interface()
 	if !val.IsValid() {
 		return
 	}
@@ -16,13 +17,10 @@ func NotEmpty(data any) (res bool) {
 		res = !val.IsNil()
 		return
 	case reflect.Array, reflect.Struct:
-		res = val.Interface() != valdef
+		res = val.Interface() != valDef
 		return
 	case reflect.String:
-		if s, ok := data.(string); ok {
-			res = s != ""
-			return
-		}
+		res = val.Len() >= 1
 		return
 	default:
 		res = !val.IsZero()
