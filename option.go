@@ -20,11 +20,11 @@ func None[T any]() (o Option[T]) {
 	return
 }
 
-func (o Option[T]) Some(value T) {
+func (o *Option[T]) Some(value T) {
 	o.val = value
 }
 
-func (o Option[T]) None() {
+func (o *Option[T]) None() {
 	var val T
 	o.val = val
 }

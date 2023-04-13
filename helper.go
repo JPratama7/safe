@@ -15,12 +15,12 @@ func NotEmpty(data any) (res bool) {
 	case reflect.Chan, reflect.Slice, reflect.Map:
 		res = !val.IsNil()
 		return
-	case reflect.Array, reflect.Struct, reflect.String:
+	case reflect.Array, reflect.Struct:
 		res = val.Interface() != valdef
 		return
-	//case reflect.String:
-	//	res = val != reflect.Zero(val.Type())
-	//	return
+	case reflect.String:
+		res = val != reflect.Zero(val.Type())
+		return
 	default:
 		res = !val.IsZero()
 		return
