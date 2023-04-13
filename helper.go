@@ -2,12 +2,12 @@ package safe
 
 import (
 	"github.com/goccy/go-reflect"
-	//refdef "reflect"
+	refdef "reflect"
 )
 
 func NotEmpty(data any) (res bool) {
-	val := reflect.ValueNoEscapeOf(data)
-	valdef := reflect.Zero(val.Type()).Interface()
+	val := reflect.ToReflectValue(reflect.ValueNoEscapeOf(data))
+	valdef := refdef.Zero(val.Type()).Interface()
 	if !val.IsValid() {
 		return
 	}
@@ -19,7 +19,7 @@ func NotEmpty(data any) (res bool) {
 		res = val.Interface() != valdef
 		return
 	case reflect.String:
-		res = val != reflect.Zero(val.Type())
+		res = val != refdef.Zero(val.Type())
 		return
 	default:
 		res = !val.IsZero()
