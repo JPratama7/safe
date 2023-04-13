@@ -25,5 +25,4 @@ func NotEmpty(data any) (res bool) {
 		res = !val.IsZero()
 		return
 	}
-	return
 }
