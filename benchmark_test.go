@@ -85,7 +85,6 @@ func BenchmarkAsResultEmptyNoErr(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		val := AsResult[TestingWithStruct](emptyStruct())
 		val.IsOk()
-		val.Unwrap()
 	}
 	b.ReportAllocs()
 }
