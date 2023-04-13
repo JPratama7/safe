@@ -2,23 +2,25 @@ package safe
 
 import (
 	"github.com/goccy/go-reflect"
-	refdef "reflect"
+	//refdef "reflect"
 )
 
 func NotEmpty(data any) (res bool) {
-	val := reflect.ToReflectValue(reflect.ValueNoEscapeOf(data))
+	val := reflect.ValueNoEscapeOf(data)
+	valdef := reflect.Zero(val.Type()).Interface()
 	if !val.IsValid() {
 		return
 	}
 	switch val.Kind() {
-	case refdef.Chan, refdef.Slice, refdef.Map:
+	case reflect.Chan, reflect.Slice, reflect.Map:
 		res = !val.IsNil()
 		return
-	case refdef.Array, refdef.Struct:
-		res = val.Interface() != refdef.Zero(val.Type()).Interface()
+	case reflect.Array, reflect.Struct, reflect.String:
+		res = val.Interface() != valdef
 		return
-	case refdef.String:
-		res = val != refdef.Zero(val.Type())
+	//case reflect.String:
+	//	res = val != reflect.Zero(val.Type())
+	//	return
 	default:
 		res = !val.IsZero()
 		return
