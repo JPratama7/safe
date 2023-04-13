@@ -68,7 +68,7 @@ func (r Result[T]) Expect(err string) T {
 }
 
 func (r Result[T]) UnwrapOr(or T) T {
-	if r.IsOk() {
+	if r.IsErr() {
 		return or
 	}
 	return r.val
