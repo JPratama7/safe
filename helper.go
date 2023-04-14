@@ -9,9 +9,6 @@ func NotEmpty(data any) (res bool) {
 	val := reflect.ToReflectValue(reflect.ValueNoEscapeOf(data))
 	typeOf := val.Type()
 	valDef := refdef.Zero(typeOf)
-	//fmt.Printf("value Croot zeroed : %+v \n", valDef)
-	//fmt.Printf("value Croot : %+v \n", val)
-	//fmt.Printf("value Croot compare : %+v \n", val.Equal(valDef))
 	if !val.IsValid() {
 		return
 	}
@@ -28,7 +25,5 @@ func NotEmpty(data any) (res bool) {
 	default:
 		res = !val.IsZero()
 		return
-		//default:
-		//	return
 	}
 }
