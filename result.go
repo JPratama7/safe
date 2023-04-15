@@ -1,11 +1,8 @@
 package safe
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
-	"github.com/goccy/go-json"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 type Result[T any] struct {
@@ -55,7 +52,7 @@ func (r *Result[T]) Error() error {
 
 func (r Result[T]) Unwrap() T {
 	if r.IsErr() {
-		panic("can't unwrap err val")
+		panic(fmt.Errorf("can't unwrap value with err"))
 	}
 	return r.val
 }
@@ -72,44 +69,4 @@ func (r Result[T]) UnwrapOr(or T) T {
 		return or
 	}
 	return r.val
-}
-
-func (r Result[T]) MarshalJSON() ([]byte, error) {
-	return json.Marshal(r.val)
-}
-
-func (r *Result[T]) UnmarshalJSON(data []byte) error {
-	res := new(T)
-
-	if bytes.HasPrefix(data, ByteCheck) {
-		r.val = *new(T)
-		return nil
-	}
-
-	if err := json.Unmarshal(data, res); err != nil {
-
-		return err
-	}
-
-	r.val = *res
-	return nil
-}
-
-func (r Result[T]) MarshalBSON() ([]byte, error) {
-	return bson.Marshal(r.val)
-}
-
-func (r *Result[T]) UnmarshalBSON(data []byte) error {
-	res := new(T)
-
-	if bytes.Equal(data, []byte{}) {
-		r.val = *res
-		return nil
-	}
-
-	if err := bson.Unmarshal(data, res); err != nil {
-		return err
-	}
-	r.val = *res
-	return nil
 }

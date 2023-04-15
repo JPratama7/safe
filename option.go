@@ -1,10 +1,7 @@
 package safe
 
 import (
-	"bytes"
 	"fmt"
-	"github.com/goccy/go-json"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 type Option[T any] struct {
@@ -58,42 +55,4 @@ func (o Option[T]) UnwrapOr(or T) T {
 		return or
 	}
 	return o.val
-}
-
-func (o Option[T]) MarshalJSON() ([]byte, error) {
-	return json.Marshal(o.val)
-}
-
-func (o *Option[T]) UnmarshalJSON(data []byte) error {
-	var val T
-
-	if bytes.HasPrefix(data, ByteCheck) {
-		o.val = val
-		return nil
-	}
-
-	if err := json.Unmarshal(data, &val); err != nil {
-		return err
-	}
-	o.val = val
-	return nil
-}
-
-func (o Option[T]) MarshalBSON() ([]byte, error) {
-	return bson.Marshal(o.val)
-}
-
-func (o *Option[T]) UnmarshalBSON(data []byte) error {
-	var val T
-
-	if bytes.Equal(data, []byte{}) {
-		o.val = val
-		return nil
-	}
-
-	if err := bson.Unmarshal(data, &val); err != nil {
-		return err
-	}
-	o.val = val
-	return nil
 }
