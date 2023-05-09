@@ -2,6 +2,7 @@ package safe
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
 	"reflect"
@@ -10,12 +11,22 @@ import (
 
 func TestResultOk(t *testing.T) {
 	res := result_test_ok()
+	fmt.Printf("%T\n", res.Unwrap())
 
 	assert.Equal(t, res.IsOk(), true)
 	assert.Equal(t, res.IsErr(), false)
 	assert.NotEmpty(t, res.val)
 	assert.NotNil(t, res.val)
 }
+
+func TestResultMap(t *testing.T) {
+	res := result_test_map()
+	assert.Equal(t, res.IsOk(), true)
+	assert.Equal(t, res.IsErr(), false)
+	assert.NotEmpty(t, res.val)
+	assert.NotNil(t, res.val)
+}
+
 func TestResultOkSlice(t *testing.T) {
 	res := result_test_slices()
 
@@ -93,6 +104,12 @@ func TestMarshalUnmarshalBSONRes(t *testing.T) {
 
 func result_test_slices() (res Result[[]TestingWithStruct]) {
 	return Ok[[]TestingWithStruct]([]TestingWithStruct{{}, {}, {}})
+}
+func result_test_map() (res Result[map[string]TestingWithStruct]) {
+	return Ok(map[string]TestingWithStruct{
+		"croot":  {},
+		"mantap": {},
+	})
 }
 
 func result_test_none() (res Result[int]) {

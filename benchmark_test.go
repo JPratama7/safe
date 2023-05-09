@@ -48,6 +48,14 @@ func BenchmarkOkSlicesInt(b *testing.B) {
 	}
 	b.ReportAllocs()
 }
+func BenchmarkOkMapIntString(b *testing.B) {
+	ints := map[int]string{1: "testing 1", 2: "testing 2", 3: "testing 3"}
+	for i := 0; i < b.N; i++ {
+		val := Ok(ints)
+		val.IsOk()
+	}
+	b.ReportAllocs()
+}
 
 func BenchmarkResult_Err(b *testing.B) {
 	for i := 0; i < b.N; i++ {
@@ -85,7 +93,6 @@ func BenchmarkAsResultEmptyNoErr(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		val := AsResult[TestingWithStruct](emptyStruct())
 		val.IsOk()
-		val.Unwrap()
 	}
 	b.ReportAllocs()
 }
