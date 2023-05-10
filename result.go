@@ -34,11 +34,12 @@ func (r *Result[T]) Err() Option[error] {
 }
 
 func (r *Result[T]) IsOk() (res bool) {
-	if r.IsErr() {
-		return
-	}
-	res = NotEmpty(r.val)
+	res = !r.IsErr()
 	return
+}
+
+func (r *Result[T]) UnwrapErr() error {
+	return r.err
 }
 
 func (r *Result[T]) IsErr() (res bool) {

@@ -5,11 +5,11 @@ import (
 )
 
 type Option[T any] struct {
-	val T
+	val *T
 }
 
 func Some[T any](value T) (o Option[T]) {
-	o.val = value
+	o.val = &value
 	return
 }
 
@@ -18,21 +18,20 @@ func None[T any]() (o Option[T]) {
 }
 
 func (o *Option[T]) Some(value T) {
-	o.val = value
+	o.val = &value
 }
 
 func (o *Option[T]) None() {
-	var val T
-	o.val = val
+	o.val = new(T)
 }
 
 func (o *Option[T]) IsSome() (res bool) {
-	res = NotEmpty(o.val)
+	res = o.val != nil
 	return
 }
 
 func (o *Option[T]) IsNone() (res bool) {
-	res = !NotEmpty(o.val)
+	res = o.val == nil
 	return
 }
 
@@ -40,19 +39,19 @@ func (o Option[T]) Expect(err string) T {
 	if o.IsNone() {
 		panic(fmt.Errorf(err))
 	}
-	return o.val
+	return *o.val
 }
 
 func (o Option[T]) Unwrap() T {
 	if o.IsNone() {
 		panic("can't unwrap none val")
 	}
-	return o.val
+	return *o.val
 }
 
 func (o Option[T]) UnwrapOr(or T) T {
 	if o.IsNone() {
 		return or
 	}
-	return o.val
+	return *o.val
 }

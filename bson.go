@@ -32,13 +32,13 @@ func (o *Option[T]) UnmarshalBSON(data []byte) error {
 	var val T
 
 	if bytes.Equal(data, []byte{}) {
-		o.val = val
+		o.val = &val
 		return nil
 	}
 
 	if err := bson.Unmarshal(data, &val); err != nil {
 		return err
 	}
-	o.val = val
+	o.val = &val
 	return nil
 }

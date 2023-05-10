@@ -34,13 +34,13 @@ func (o *Option[T]) UnmarshalJSON(data []byte) error {
 	var val T
 
 	if bytes.HasPrefix(data, ByteCheck) {
-		o.val = val
+		o.val = &val
 		return nil
 	}
 
 	if err := json.Unmarshal(data, &val); err != nil {
 		return err
 	}
-	o.val = val
+	o.val = &val
 	return nil
 }
