@@ -5,20 +5,27 @@ import (
 	"github.com/goccy/go-reflect"
 	"math"
 	refdef "reflect"
+	"unsafe"
 )
 
-func NotEmpty(data any) (res bool) {
-	val := reflect.ToReflectValue(reflect.ValueNoEscapeOf(data))
-	valDef := refdef.Zero(val.Type())
+func reflectValue(val refdef.Value) (res bool) {
+	valDef := refdef.Value{}
+	if val.Kind() != refdef.Pointer {
+		valDef = refdef.Zero(val.Type())
+	}
+
 	if !val.IsValid() {
 		return
 	}
 	switch val.Kind() {
-	case refdef.Chan, refdef.Slice, refdef.Map, refdef.Func, refdef.Pointer, refdef.UnsafePointer, refdef.Interface:
+	case refdef.Chan, refdef.Func, refdef.Pointer, refdef.UnsafePointer, refdef.Interface:
 		res = !val.IsNil()
 		return
 	case refdef.Array, refdef.Struct:
 		res = val.Interface() != valDef.Interface()
+		return
+	case refdef.Slice, refdef.Map:
+		res = val.Len() > 0
 		return
 	case refdef.Bool:
 		res = val.Bool()
@@ -40,6 +47,30 @@ func NotEmpty(data any) (res bool) {
 		res = val != valDef
 		return
 	default:
-		panic(fmt.Errorf("unsupported type %T, a %s", data, val.Kind()))
+		panic(fmt.Errorf("unsupported type a %v", val.Kind()))
+	}
+}
+
+func IsNotEmpty(data any) bool {
+	switch val := data.(type) {
+	case func(), *interface{}, unsafe.Pointer:
+		return val != nil
+	case bool:
+		return val
+	case int, int8, int16, int32, int64:
+		return val != 0
+	case uint, uint8, uint16, uint32, uint64, uintptr:
+		return val != 0
+	case float32, float64:
+		conv := val.(float64)
+		return math.Float64bits(conv) != 0
+	case complex64, complex128:
+		conv := val.(complex128)
+		return math.Float64bits(real(conv)) != 0 && math.Float64bits(imag(conv)) != 0
+	case string:
+		return val != ""
+	default:
+		refl := reflect.ToReflectValue(reflect.ValueNoEscapeOf(val))
+		return reflectValue(refl)
 	}
 }

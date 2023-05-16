@@ -30,7 +30,10 @@ func (r *Result[T]) Ok() Option[T] {
 }
 
 func (r *Result[T]) Err() Option[error] {
-	return Some[error](r.err)
+	if r.err != nil {
+		return None[error]()
+	}
+	return Some(r.err)
 }
 
 func (r *Result[T]) IsOk() (res bool) {

@@ -53,6 +53,14 @@ func TestResultErr(t *testing.T) {
 	assert.Empty(t, res.val)
 }
 
+func TestResultErrOpt(t *testing.T) {
+	res := result_test_none()
+
+	assert.Equal(t, res.IsOk(), false)
+	assert.Equal(t, res.IsErr(), true)
+	assert.Empty(t, res.val)
+}
+
 func result_test_ok() (res Result[TestingWithStruct]) {
 	return Ok(TestingWithStruct{
 		OuterField:  "croot",

@@ -2,6 +2,7 @@ package safe
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
 	"reflect"
@@ -17,8 +18,25 @@ func TestSome(t *testing.T) {
 	assert.NotNil(t, res.val)
 }
 
+func TestSomeError(t *testing.T) {
+	res := Some(errors.New("testing with error"))
+
+	assert.Equal(t, res.IsSome(), true)
+	assert.Equal(t, res.IsNone(), false)
+	assert.NotEmpty(t, res.val)
+	assert.NotNil(t, res.val)
+}
+
 func TestNone(t *testing.T) {
 	res := option_test_none()
+
+	assert.Equal(t, res.IsSome(), false)
+	assert.Equal(t, res.IsNone(), true)
+	assert.Empty(t, res.val)
+}
+
+func TestNoneError(t *testing.T) {
+	res := None[error]()
 
 	assert.Equal(t, res.IsSome(), false)
 	assert.Equal(t, res.IsNone(), true)

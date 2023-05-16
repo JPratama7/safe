@@ -26,12 +26,12 @@ func (o *Option[T]) None() {
 }
 
 func (o *Option[T]) IsSome() (res bool) {
-	res = o.val != nil
+	res = o.notmissing()
 	return
 }
 
 func (o *Option[T]) IsNone() (res bool) {
-	res = o.val == nil
+	res = !o.notmissing()
 	return
 }
 
@@ -54,4 +54,9 @@ func (o Option[T]) UnwrapOr(or T) T {
 		return or
 	}
 	return *o.val
+}
+
+func (o Option[T]) notmissing() (res bool) {
+	res = IsNotEmpty(o.val)
+	return
 }
