@@ -9,11 +9,6 @@ import (
 )
 
 func reflectValue(val refdef.Value) (res bool) {
-	valDef := refdef.Value{}
-	if val.Kind() != refdef.Pointer {
-		valDef = refdef.Zero(val.Type())
-	}
-
 	if !val.IsValid() {
 		return
 	}
@@ -22,7 +17,7 @@ func reflectValue(val refdef.Value) (res bool) {
 		res = !val.IsNil()
 		return
 	case refdef.Array, refdef.Struct:
-		res = val.Interface() != valDef.Interface()
+		res = val.Interface() != refdef.Zero(val.Type()).Interface()
 		return
 	case refdef.Slice, refdef.Map:
 		res = val.Len() > 0
@@ -44,7 +39,7 @@ func reflectValue(val refdef.Value) (res bool) {
 		res = math.Float64bits(real(c)) != 0 && math.Float64bits(imag(c)) != 0
 		return
 	case refdef.String:
-		res = val != valDef
+		res = val != refdef.Zero(val.Type())
 		return
 	default:
 		panic(fmt.Errorf("unsupported type a %v", val.Kind()))

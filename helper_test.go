@@ -18,8 +18,7 @@ func TestNotEmpty(t *testing.T) {
 	float := 10.0
 	assert.Equal(t, IsNotEmpty(float), true)
 	// bool
-	boolean := true
-	assert.Equal(t, IsNotEmpty(boolean), true)
+	assert.Equal(t, IsNotEmpty(true), true)
 	// slice
 	slice := []int{1, 2, 3}
 	assert.Equal(t, IsNotEmpty(slice), true)
